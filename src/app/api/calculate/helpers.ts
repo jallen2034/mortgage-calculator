@@ -1,11 +1,7 @@
-/* Calculate the interest rate per payment period from the annual interest rate getting the per-payment schedule rate:
- * 1. Convert the annual rate to a decimal (e.g., 5% becomes 0.05).
- * 2. Divide this decimal by the number of payment periods per year:
- *    - Monthly payments: divide by 12.
- *    - Bi-weekly payments: divide by 26.
- *    - Weekly payments: divide by 52.
- * Example: For an annual rate of 5% (0.05) and monthly payments:
- * r = 0.05 / 12 = 0.004167 (monthly interest rate). */
+/* Calculate the interest rate per payment period by dividing the annual interest rate
+ * (as a decimal) by the number of periods per year.
+ * Example: For an annual rate of 5% (0.05) and monthly payments (12 periods/year):
+ * 0.05 / 12 = 0.004167 (monthly interest rate). */
 const calculatePerPaymentScheduleInterestRate = (
   annualInterestRateDecimal: number,
   periodsPerYear: number
@@ -13,7 +9,9 @@ const calculatePerPaymentScheduleInterestRate = (
   return annualInterestRateDecimal / periodsPerYear;
 }
 
-//Calculate the CMHC insurance premium based on the insurance rate and mortgage amount.
+/* Compute the CMHC insurance premium by multiplying the insurance rate by the mortgage amount before insurance.
+ * Example: For an insurance rate of 4.5% (0.045) and a mortgage amount of $200,000:
+ * 0.045 * 200,000 = $9,000 insurance premium. */
 const calculateCMHCInsurancePremium = (
   insuranceRate: number,
   mortgageAmountBeforeInsurance: number
@@ -21,13 +19,10 @@ const calculateCMHCInsurancePremium = (
   return insuranceRate * mortgageAmountBeforeInsurance;
 }
 
-/* Calculate the total number of payments over the amortization period.
- * Calculates the total number of payments to be made over the entire amortization period
- * based on the number of payment periods per year + the total number of years in the period.
- * - For an amortization period of 30 years with monthly payments (12 periods per year),
- *   the total number of payments would be 30 * 12 = 360 payments.
- * - For a 5-year amortization period with bi-weekly payments (26 periods per year),
- *   the total number of payments would be 5 * 26 = 130 payments. */
+/* Calculate total number of payments over the amortization period by multiplying the number of
+ * payment periods per year by the total number of years in the amortization period.
+ * Example: For a 30-year amortization period with monthly payments (12 periods/year):
+ * 30 * 12 = 360 payments. */
 const calculateTotalNumberOfPaymentsOverAmortizationPeriod = (
   periodsPerYear: number,
   amortizationPeriod: number
@@ -35,10 +30,8 @@ const calculateTotalNumberOfPaymentsOverAmortizationPeriod = (
   return periodsPerYear * amortizationPeriod;
 }
 
-/* Converts an annual interest rate percentage to a decimal.
- * This function converts a percentage (e.g., 5%) to a decimal (e.g., 0.05).
- * Example: For an annual rate of 5%:
- * decimalRate = 5 / 100 = 0.05 */
+/* Convert an annual interest rate percentage to a decimal. Example: For an annual rate of 5%:
+ * 5 / 100 = 0.05. */
 const convertInterestRateToDecimal = (annualInterestRate: number): number => {
   return annualInterestRate / 100
 }
@@ -65,8 +58,6 @@ const calculateCMHCInsuranceRate = (
   downPayment: number,
   downPaymentPercentage: number
 ): number => {
-
-  // Determine the CMHC insurance rate based on the down payment percentage
   switch (true) {
     case downPaymentPercentage < 10:
       return 0.045; // 4.50%
@@ -79,10 +70,8 @@ const calculateCMHCInsuranceRate = (
   }
 }
 
-/* Determines if the down payment is less than 20% of the property price.
- * This function checks if the down payment is less than 20% of the property price.
- * If it is, the function returns true, indicating that the down payment is insufficient.
- * Otherwise, it returns false. */
+/* Check if the down payment is less than 20% of the property price.
+ * Returns true if the down payment is less than 20%, otherwise false. */
 const isDownPaymentLessThanMinimum = (
   propertyPrice: number,
   downPayment: number
@@ -91,48 +80,41 @@ const isDownPaymentLessThanMinimum = (
   return downPayment < minimumDownPayment;
 }
 
-/* Calculate the monthly mortgage payment based on the principal,
- * interest rate per period, and total number of payments. Uses this formula:
- * M = (P * r * (1 + r)^n) / ((1 + r)^n - 1) */
+/* Calculate the monthly mortgage payment using the principal, interest rate per period, and total number of payments.
+ * Formula: M = (P * r * (1 + r)^n) / ((1 + r)^n - 1)
+ * - P: Principal amount
+ * - r: Interest rate per period
+ * - n: Total number of payments */
 const calculateMonthlyMortgagePayment = (
   principal: number,
   totalNumberOfPayments: number,
   perPaymentScheduleInterestRate: number
 ): number => {
-  // Handle the case where the interest rate is zero.
   if (perPaymentScheduleInterestRate === 0) {
     return principal / totalNumberOfPayments;
   }
 
-  // Calculate the factor (1 + r)^n.
   const factor: number = Math.pow(1 + perPaymentScheduleInterestRate, totalNumberOfPayments);
-
-  // Calculate the numerator: P * r * (1 + r)^n.
   const numerator: number = principal * perPaymentScheduleInterestRate * factor;
-
-  // Calculate the denominator: (1 + r)^n - 1.
   const denominator: number = factor - 1;
 
-  // Calculate the monthly mortgage payment: numerator / denominator.
   return numerator / denominator;
 }
 
+// Compute the insurance premium and apply it to the mortgage amount if necessary.
 const calculateInsurancePremium = (
   propertyPrice: number,
   downPayment: number,
   CHMCInsuranceRate: number
 ) => {
-  // Calculate the mortgage amount before insurance.
   const mortgageAmountBeforeInsurance: number = propertyPrice - downPayment;
-
-  // Calculate the CMHC insurance premium.
   return calculateCMHCInsurancePremium(
     CHMCInsuranceRate,
     mortgageAmountBeforeInsurance
   );
 }
 
-// Apply CMHC insurance premium to the total mortgage amount if needed.
+// Add the CMHC insurance premium to the current mortgage amount to get the final amount.
 const applyCMHCInsurance = (
   propertyPrice: number,
   downPayment: number,

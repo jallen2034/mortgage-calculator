@@ -1,5 +1,4 @@
 import {
-  applyCMHCInsurance,
   calculateCMHCInsurancePremium,
   calculateCMHCInsuranceRate,
   calculateMonthlyMortgagePayment,

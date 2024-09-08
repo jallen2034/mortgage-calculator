@@ -1,12 +1,15 @@
-import { Box, Button, FormControl, InputLabel, MenuItem, Select, TextField } from "@mui/material"
-import { MortgageCalculatorFormProps } from "@/app/component/MorgageCalculatorForm/types"
+import { Box, Button, FormControl, InputLabel, MenuItem, Select, TextField } from "@mui/material";
+import { MortgageCalculatorFormProps } from "@/app/component/MorgageCalculatorForm/types";
+import React from "react"
+import "./mortgageCalculator.scss";
 
-const MortgageCalculatorForm: React.FC<MortgageCalculatorFormProps> = ({
+const MortgageCalculatorForm = ({
   formState,
   handleChangeTextField,
   handleChangeSelect,
-  handleSubmit
-}) => {
+  handleSubmit,
+  errorFromAPI
+}: MortgageCalculatorFormProps) => {
   return (
     <Box component="form" onSubmit={handleSubmit} className="form-box">
       <FormControl fullWidth margin="normal">
@@ -25,6 +28,8 @@ const MortgageCalculatorForm: React.FC<MortgageCalculatorFormProps> = ({
           value={formState.downPayment}
           onChange={handleChangeTextField}
           variant="outlined"
+          error={!!errorFromAPI}
+          helperText={errorFromAPI ? errorFromAPI : ""}
         />
       </FormControl>
       <FormControl fullWidth margin="normal">

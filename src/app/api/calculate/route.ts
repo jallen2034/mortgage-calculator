@@ -2,7 +2,9 @@ import { NextRequest } from "next/server";
 import { NextResponseHandler } from "@/app/api/_apiFactory/nextResponseHandler";
 import { MortgageCalculatorFormState } from "@/app/calculator/types";
 import {
-  applyCMHCInsurance, calculateCMHCInsuranceRate, calculateInsurancePremium,
+  applyCMHCInsurance,
+  calculateCMHCInsuranceRate,
+  calculateInsurancePremium,
   calculateMonthlyMortgagePayment,
   calculatePerPaymentScheduleInterestRate,
   calculateTotalNumberOfPaymentsOverAmortizationPeriod,
@@ -10,12 +12,13 @@ import {
   getPeriodsPerYear,
   isDownPaymentLessThanMinimum
 } from "@/app/api/calculate/helpers"
+import { CalculatedResult } from "@/app/api/calculate/types"
 
-export async function POST(request: NextRequest): Promise<any> {
+export async function POST(request: NextRequest): Promise<CalculatedResult> {
   try {
     // Destructure values from the incoming request.
     const {
-      propertyPrice, // Principal loan amount (P)
+      propertyPrice, // Principal loan amount (P).
       amortizationPeriod,
       paymentSchedule,
       downPayment,
@@ -35,12 +38,16 @@ export async function POST(request: NextRequest): Promise<any> {
 
     // Calculate the mortgage amount before insurance is applied.
     let totalMortgageAmount: number = parsedPropertyPrice - parsedDownPayment;
-
     let CHMCInsuranceRate: number = 0;
     let insurancePremium: number = 0;
 
     // Calculate the percentage of down payment
     const downPaymentPercentage: number = (downPayment / propertyPrice) * 100;
+
+    // Validate that the down payment is not less than 5%. This is invalid.
+    if (downPaymentPercentage < 5) {
+      throw new Error("A deposit for a mortgage cannot be less than 5%!");
+    }
 
     // Determine the number of payment periods per year based on the payment schedule.
     const payPeriodsPerYear: number = getPeriodsPerYear(paymentSchedule);
@@ -90,8 +97,8 @@ export async function POST(request: NextRequest): Promise<any> {
       perPaymentScheduleInterestRate
     );
 
-    // Return the calculated monthly mortgage payment in the response.
-    return NextResponseHandler({
+    // Response payload from this API on a 200 success response for the UI to use.
+    const APIResponsePayload: CalculatedResult = {
       monthlyMortgagePayment,
       needsCHMCInsurance,
       totalMortgageAmount,
@@ -102,10 +109,15 @@ export async function POST(request: NextRequest): Promise<any> {
       parsedPropertyPrice,
       CHMCInsuranceRate,
       insurancePremium,
-      downPaymentPercentage
-    }, 200);
+      downPaymentPercentage,
+      downPayment
+    }
+
+    // Return the calculated monthly mortgage payment in the success response.
+    return NextResponseHandler(APIResponsePayload, 200);
   } catch (error) {
-    console.error("Error processing mortgage calculation:", error);
-    return NextResponseHandler({ error: "An unexpected error occurred while processing your request." }, 500);
+    console.error("Unexpected error processing the mortgage calculation:", error);
+    const errorMessage: string = error.message
+    return NextResponseHandler({ errorMessage }, 500);
   }
 }
