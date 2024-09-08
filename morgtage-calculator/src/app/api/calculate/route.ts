@@ -2,12 +2,14 @@ import { NextRequest } from "next/server";
 import { NextResponseHandler } from "@/app/api/_apiFactory/nextResponseHandler";
 import { MortgageCalculatorFormState } from "@/app/calculator/types";
 import {
+  applyCMHCInsurance,
   calculateMonthlyMortgagePayment,
   calculatePerPaymentScheduleInterestRate,
   calculateTotalNumberOfPaymentsOverAmortizationPeriod,
   convertInterestRateToDecimal,
-  getPeriodsPerYear
-} from "@/app/api/calculate/helpers";
+  getPeriodsPerYear,
+  isDownPaymentLessThanMinimum
+} from "@/app/api/calculate/helpers"
 
 export async function POST(request: NextRequest) {
   try {
@@ -19,6 +21,9 @@ export async function POST(request: NextRequest) {
       downPayment,
       interestRate
     }: MortgageCalculatorFormState = await request.json();
+
+    // Calculate the mortgage amount before insurance is applied.
+    let totalMortgageAmount: number = propertyPrice - downPayment;
 
     // Determine the number of payment periods per year based on the payment schedule.
     const payPeriodsPerYear: number = getPeriodsPerYear(paymentSchedule);
@@ -38,9 +43,21 @@ export async function POST(request: NextRequest) {
       amortizationPeriod
     );
 
+    // Determine if CMHC insurance is needed.
+    const needsCHMCInsurance: boolean = isDownPaymentLessThanMinimum(propertyPrice, downPayment);
+
+    // If CMHC insurance is needed, apply it to the mortgage amount.
+    if (needsCHMCInsurance) {
+      totalMortgageAmount = applyCMHCInsurance(
+        propertyPrice,
+        downPayment,
+        totalMortgageAmount
+      );
+    }
+
     // Calculate the mortgage payment amount per payment schedule (M).
     const monthlyMortgagePayment: number = calculateMonthlyMortgagePayment(
-      propertyPrice,
+      totalMortgageAmount,
       totalNumberOfPaymentsOverAmortization,
       perPaymentScheduleInterestRate
     );

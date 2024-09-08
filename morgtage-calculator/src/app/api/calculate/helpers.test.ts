@@ -1,8 +1,12 @@
 import {
+  calculateCMHCInsurancePremium,
+  calculateCMHCInsuranceRate,
   calculateMonthlyMortgagePayment,
   calculatePerPaymentScheduleInterestRate,
   calculateTotalNumberOfPaymentsOverAmortizationPeriod,
-  convertInterestRateToDecimal, getPeriodsPerYear
+  convertInterestRateToDecimal,
+  getPeriodsPerYear,
+  isDownPaymentLessThanMinimum
 } from "@/app/api/calculate/helpers"
 
 // Unit tests for the `calculatePerPaymentScheduleInterestRate` function to verify correct computation of interest rates (r).
@@ -133,5 +137,106 @@ describe('calculateMonthlyMortgagePayment', (): void => {
     );
 
     expect(result).toBeCloseTo(1610.4648690364193, 4); // Use toBeCloseTo for floating-point precision
+  });
+});
+
+describe('isDownPaymentLessThanMinimum', (): void => {
+  test('returns true if down payment is less than 20% of property price', (): void => {
+    const propertyPrice: number = 300000;
+    const downPayment: number = 50000; // 16.67% of property price
+    expect(isDownPaymentLessThanMinimum(propertyPrice, downPayment)).toBe(true);
+  });
+
+  test('returns false if down payment is exactly 20% of property price', (): void => {
+    const propertyPrice: number = 300000;
+    const downPayment: number = 60000; // Exactly 20% of property price
+    expect(isDownPaymentLessThanMinimum(propertyPrice, downPayment)).toBe(false);
+  });
+
+  test('returns false if down payment is more than 20% of property price', (): void => {
+    const propertyPrice: number = 300000;
+    const downPayment: number = 70000; // 23.33% of property price
+    expect(isDownPaymentLessThanMinimum(propertyPrice, downPayment)).toBe(false);
+  });
+
+  test('returns false if down payment is zero', (): void => {
+    const propertyPrice: number = 300000;
+    const downPayment: number = 0; // 0% of property price
+    expect(isDownPaymentLessThanMinimum(propertyPrice, downPayment)).toBe(true);
+  });
+
+  test('returns false if property price is zero and down payment is zero', (): void => {
+    const propertyPrice: number = 0;
+    const downPayment: number = 0; // Zero down payment
+    expect(isDownPaymentLessThanMinimum(propertyPrice, downPayment)).toBe(false);
+  });
+});
+
+describe('Calculate CMHC Insurance Rate Calculations', (): void => {
+  test('should return 4.50% for down payment < 10%', (): void => {
+    expect(calculateCMHCInsuranceRate(300000, 15000)).toBe(0.045);
+    expect(calculateCMHCInsuranceRate(100000, 4000)).toBe(0.045);
+  });
+
+  test('should return 3.10% for down payment < 15%', (): void => {
+    expect(calculateCMHCInsuranceRate(300000, 30000)).toBe(0.031);
+    expect(calculateCMHCInsuranceRate(100000, 12000)).toBe(0.031);
+  });
+
+  test('should return 2.80% for down payment < 20%', (): void => {
+    expect(calculateCMHCInsuranceRate(300000, 45000)).toBe(0.028);
+    expect(calculateCMHCInsuranceRate(100000, 17000)).toBe(0.028);
+  });
+
+  test('should return 0% for down payment >= 20%', (): void => {
+    expect(calculateCMHCInsuranceRate(300000, 60000)).toBe(0);
+    expect(calculateCMHCInsuranceRate(100000, 22000)).toBe(0);
+  });
+});
+
+describe("calculateCMHCInsurancePremium", (): void => {
+  it("should correctly calculate the insurance premium for a given rate and mortgage amount", () => {
+    const insuranceRate: number = 0.045; // 4.50%
+    const mortgageAmountBeforeInsurance: number = 100000; // $100,000
+
+    const result: number = calculateCMHCInsurancePremium(insuranceRate, mortgageAmountBeforeInsurance);
+
+    expect(result).toBe(4500); // 4.50% of $100,000 = $4,500
+  });
+
+  it("should return 0 if the insurance rate is 0", (): void => {
+    const insuranceRate: number = 0;
+    const mortgageAmountBeforeInsurance: number = 100000; // $100,000
+
+    const result: number = calculateCMHCInsurancePremium(insuranceRate, mortgageAmountBeforeInsurance);
+
+    expect(result).toBe(0); // 0% of $100,000 = $0
+  });
+
+  it("should return 0 if the mortgage amount before insurance is 0", (): void => {
+    const insuranceRate: number = 0.045; // 4.50%
+    const mortgageAmountBeforeInsurance: number = 0;
+
+    const result: number = calculateCMHCInsurancePremium(insuranceRate, mortgageAmountBeforeInsurance);
+
+    expect(result).toBe(0); // 4.50% of $0 = $0
+  });
+
+  it("should handle large numbers correctly", (): void => {
+    const insuranceRate: number = 0.028; // 2.80%
+    const mortgageAmountBeforeInsurance: number = 10000000; // $10,000,000
+
+    const result: number = calculateCMHCInsurancePremium(insuranceRate, mortgageAmountBeforeInsurance);
+
+    expect(result).toBe(280000); // 2.80% of $10,000,000 = $280,000
+  });
+
+  it("should handle small numbers correctly", (): void => {
+    const insuranceRate: number = 0.031; // 3.10%
+    const mortgageAmountBeforeInsurance: number = 0.01; // $0.01
+
+    const result: number = calculateCMHCInsurancePremium(insuranceRate, mortgageAmountBeforeInsurance);
+
+    expect(result).toBeCloseTo(0.00031, 5); // 3.10% of $0.01 = $0.00031
   });
 });
