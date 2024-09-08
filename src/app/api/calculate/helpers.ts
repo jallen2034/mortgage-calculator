@@ -22,9 +22,8 @@ const calculateCMHCInsurancePremium = (
 }
 
 /* Calculate the total number of payments over the amortization period.
- * This function calculates the total number of payments to be made over the entire amortization period
- * based on the number of payment periods per year and the total number of years in the amortization period.
- * For example:
+ * Calculates the total number of payments to be made over the entire amortization period
+ * based on the number of payment periods per year + the total number of years in the period.
  * - For an amortization period of 30 years with monthly payments (12 periods per year),
  *   the total number of payments would be 30 * 12 = 360 payments.
  * - For a 5-year amortization period with bi-weekly payments (26 periods per year),
@@ -63,10 +62,9 @@ const getPeriodsPerYear = (
 // Calculate the CMHC insurance rate based on the down payment percentage.
 const calculateCMHCInsuranceRate = (
   propertyPrice: number,
-  downPayment: number
+  downPayment: number,
+  downPaymentPercentage: number
 ): number => {
-  // Calculate the percentage of down payment
-  const downPaymentPercentage: number = (downPayment / propertyPrice) * 100;
 
   // Determine the CMHC insurance rate based on the down payment percentage
   switch (true) {
@@ -94,8 +92,7 @@ const isDownPaymentLessThanMinimum = (
 }
 
 /* Calculate the monthly mortgage payment based on the principal,
- * interest rate per period, and total number of payments.
- * Uses the formula:
+ * interest rate per period, and total number of payments. Uses this formula:
  * M = (P * r * (1 + r)^n) / ((1 + r)^n - 1) */
 const calculateMonthlyMortgagePayment = (
   principal: number,
@@ -107,37 +104,41 @@ const calculateMonthlyMortgagePayment = (
     return principal / totalNumberOfPayments;
   }
 
-  // Calculate the factor (1 + r)^n
+  // Calculate the factor (1 + r)^n.
   const factor: number = Math.pow(1 + perPaymentScheduleInterestRate, totalNumberOfPayments);
 
-  // Calculate the numerator: P * r * (1 + r)^n
+  // Calculate the numerator: P * r * (1 + r)^n.
   const numerator: number = principal * perPaymentScheduleInterestRate * factor;
 
-  // Calculate the denominator: (1 + r)^n - 1
+  // Calculate the denominator: (1 + r)^n - 1.
   const denominator: number = factor - 1;
 
-  // Calculate the monthly mortgage payment: numerator / denominator
+  // Calculate the monthly mortgage payment: numerator / denominator.
   return numerator / denominator;
+}
+
+const calculateInsurancePremium = (
+  propertyPrice: number,
+  downPayment: number,
+  CHMCInsuranceRate: number
+) => {
+  // Calculate the mortgage amount before insurance.
+  const mortgageAmountBeforeInsurance: number = propertyPrice - downPayment;
+
+  // Calculate the CMHC insurance premium.
+  return calculateCMHCInsurancePremium(
+    CHMCInsuranceRate,
+    mortgageAmountBeforeInsurance
+  );
 }
 
 // Apply CMHC insurance premium to the total mortgage amount if needed.
 const applyCMHCInsurance = (
   propertyPrice: number,
   downPayment: number,
-  currentMortgageAmount: number
+  currentMortgageAmount: number,
+  insurancePremium: number
 ): number => {
-  const CHMCInsuranceRate: number = calculateCMHCInsuranceRate(propertyPrice, downPayment);
-
-  // Calculate the mortgage amount before insurance.
-  const mortgageAmountBeforeInsurance: number = propertyPrice - downPayment;
-
-  // Calculate the CMHC insurance premium.
-  const insurancePremium: number = calculateCMHCInsurancePremium(
-    CHMCInsuranceRate,
-    mortgageAmountBeforeInsurance
-  );
-
-  // Add the insurance premium to the total mortgage amount
   return currentMortgageAmount + insurancePremium;
 }
 
@@ -150,5 +151,6 @@ export {
   isDownPaymentLessThanMinimum,
   calculateCMHCInsuranceRate,
   calculateCMHCInsurancePremium,
-  applyCMHCInsurance
+  applyCMHCInsurance,
+  calculateInsurancePremium
 }
