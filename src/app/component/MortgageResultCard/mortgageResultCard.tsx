@@ -8,6 +8,14 @@ const MortgageResultCard: React.FC<MortgageResultCardProps> = ({ calculationResu
     <div className="resultCard">
       <div className="resultItem">
         <Typography variant="body1" className="resultLabel">
+          Down Payment Percentage:
+        </Typography>
+        <Typography variant="body1" className="resultValue">
+          {calculationResult.downPaymentPercentage.toFixed(2)}%
+        </Typography>
+      </div>
+      <div className="resultItem">
+        <Typography variant="body1" className="resultLabel">
           Monthly Mortgage Payment:
         </Typography>
         <Typography variant="body1" className="resultValue">

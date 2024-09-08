@@ -1,5 +1,6 @@
-import { Box, Button, FormControl, InputLabel, MenuItem, Select, TextField } from "@mui/material"
-import { MortgageCalculatorFormProps } from "@/app/component/MorgageCalculatorForm/types"
+import { Box, Button, FormControl, InputLabel, MenuItem, Select, TextField } from "@mui/material";
+import { MortgageCalculatorFormProps } from "@/app/component/MorgageCalculatorForm/types";
+import "./mortgageCalculator.scss";
 
 const MortgageCalculatorForm: React.FC<MortgageCalculatorFormProps> = ({
   formState,
