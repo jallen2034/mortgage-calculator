@@ -25,8 +25,6 @@ export default function MortgageCalculator() {
     paymentSchedule: 'Monthly'
   });
 
-  console.log(formState);
-
   // Handle change for both TextField and Select components
   const handleChange = (e: React.ChangeEvent<HTMLInputElement> | React.ChangeEvent<{ name?: string; value: unknown }>): void => {
     const { id, value } = e.target as HTMLInputElement;
