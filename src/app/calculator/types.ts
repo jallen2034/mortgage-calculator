@@ -1,7 +1,12 @@
 export interface MortgageCalculatorFormState {
-  propertyPrice: number;
-  downPayment: number;
-  interestRate: number;
-  amortizationPeriod: number;
-  paymentSchedule: "Monthly" | "Bi-Weekly" | "Accelerated Bi-Weekly";
+  propertyPrice: string | null;
+  downPayment: string | null;
+  interestRate: string | null ;
+  amortizationPeriod?: string;
+  paymentSchedule?: "Monthly" | "Bi-Weekly" | "Accelerated Bi-Weekly";
+}
+
+export interface SelectChangeEventTarget {
+  name?: string;
+  value: unknown;
 }

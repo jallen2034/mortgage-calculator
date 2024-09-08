@@ -1,0 +1,23 @@
+.resultCard {
+  margin-top: 20px;
+  width: 100%;
+  padding: 20px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  background-color: #f9f9f9;
+}
+
+.resultItem {
+  margin-bottom: 15px;
+}
+
+.resultLabel {
+  font-weight: 600;
+  color: #333;
+  font-size: 1.1rem;  // Slightly larger font size
+}
+
+.resultValue {
+  color: #555;
+  font-size: 1rem;   // Adjust font size for values
+}

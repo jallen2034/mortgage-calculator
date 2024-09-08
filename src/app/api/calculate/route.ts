@@ -2,7 +2,7 @@ import { NextRequest } from "next/server";
 import { NextResponseHandler } from "@/app/api/_apiFactory/nextResponseHandler";
 import { MortgageCalculatorFormState } from "@/app/calculator/types";
 import {
-  applyCMHCInsurance,
+  applyCMHCInsurance, calculateCMHCInsuranceRate, calculateInsurancePremium,
   calculateMonthlyMortgagePayment,
   calculatePerPaymentScheduleInterestRate,
   calculateTotalNumberOfPaymentsOverAmortizationPeriod,
@@ -11,7 +11,7 @@ import {
   isDownPaymentLessThanMinimum
 } from "@/app/api/calculate/helpers"
 
-export async function POST(request: NextRequest) {
+export async function POST(request: NextRequest): Promise<any> {
   try {
     // Destructure values from the incoming request.
     const {
@@ -22,14 +22,31 @@ export async function POST(request: NextRequest) {
       interestRate
     }: MortgageCalculatorFormState = await request.json();
 
+    // Validate inputs from the client to ensure they are not missing anything.
+    if (!propertyPrice || !amortizationPeriod || !downPayment || !interestRate || !paymentSchedule) {
+      throw new Error("Invalid input")
+    }
+
+    // Parse the incoming values to ensure they're numbers
+    const parsedPropertyPrice: number = parseFloat(propertyPrice);
+    const parsedAmortizationPeriod: number = parseFloat(amortizationPeriod);
+    const parsedDownPayment: number = parseFloat(downPayment);
+    const parsedInterestRate: number = parseFloat(interestRate);
+
     // Calculate the mortgage amount before insurance is applied.
-    let totalMortgageAmount: number = propertyPrice - downPayment;
+    let totalMortgageAmount: number = parsedPropertyPrice - parsedDownPayment;
+
+    let CHMCInsuranceRate: number = 0;
+    let insurancePremium: number = 0;
+
+    // Calculate the percentage of down payment
+    const downPaymentPercentage: number = (downPayment / propertyPrice) * 100;
 
     // Determine the number of payment periods per year based on the payment schedule.
     const payPeriodsPerYear: number = getPeriodsPerYear(paymentSchedule);
 
     // Convert the annual interest rate percentage to a decimal.
-    const convertedDecimalInterestRate: number = convertInterestRateToDecimal(interestRate);
+    const convertedDecimalInterestRate: number = convertInterestRateToDecimal(parsedInterestRate);
 
     // Calculate the interest rate per payment period based on the annual rate and payment frequency (r).
     const perPaymentScheduleInterestRate: number = calculatePerPaymentScheduleInterestRate(
@@ -40,18 +57,29 @@ export async function POST(request: NextRequest) {
     // Calculate the total number of payments over the amortization period (n).
     const totalNumberOfPaymentsOverAmortization: number = calculateTotalNumberOfPaymentsOverAmortizationPeriod(
       payPeriodsPerYear,
-      amortizationPeriod
+      parsedAmortizationPeriod
     );
 
     // Determine if CMHC insurance is needed.
-    const needsCHMCInsurance: boolean = isDownPaymentLessThanMinimum(propertyPrice, downPayment);
+    const needsCHMCInsurance: boolean = isDownPaymentLessThanMinimum(parsedPropertyPrice, parsedDownPayment);
 
     // If CMHC insurance is needed, apply it to the mortgage amount.
     if (needsCHMCInsurance) {
+      CHMCInsuranceRate = calculateCMHCInsuranceRate(
+        parsedPropertyPrice,
+        parsedDownPayment,
+        downPaymentPercentage
+      );
+      insurancePremium = calculateInsurancePremium(
+        parsedPropertyPrice,
+        parsedDownPayment,
+        CHMCInsuranceRate
+      )
       totalMortgageAmount = applyCMHCInsurance(
-        propertyPrice,
-        downPayment,
-        totalMortgageAmount
+        parsedPropertyPrice,
+        parsedDownPayment,
+        totalMortgageAmount,
+        insurancePremium
       );
     }
 
@@ -63,7 +91,19 @@ export async function POST(request: NextRequest) {
     );
 
     // Return the calculated monthly mortgage payment in the response.
-    return NextResponseHandler(monthlyMortgagePayment, 200);
+    return NextResponseHandler({
+      monthlyMortgagePayment,
+      needsCHMCInsurance,
+      totalMortgageAmount,
+      totalNumberOfPaymentsOverAmortization,
+      perPaymentScheduleInterestRate,
+      convertedDecimalInterestRate,
+      payPeriodsPerYear,
+      parsedPropertyPrice,
+      CHMCInsuranceRate,
+      insurancePremium,
+      downPaymentPercentage
+    }, 200);
   } catch (error) {
     console.error("Error processing mortgage calculation:", error);
     return NextResponseHandler({ error: "An unexpected error occurred while processing your request." }, 500);

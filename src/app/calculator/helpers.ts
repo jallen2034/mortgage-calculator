@@ -12,9 +12,7 @@ export async function fetchMortgageCalculation(data: any): Promise<number> {
       throw new Error('Network response was not ok');
     }
 
-    const result = await response.json();
-    console.log(result)
-    return result.payment;
+    return await response.json();
   } catch (error) {
     console.error('Error fetching data:', error);
     throw error;

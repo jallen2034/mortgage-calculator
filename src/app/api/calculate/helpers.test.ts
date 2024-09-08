@@ -1,4 +1,5 @@
 import {
+  applyCMHCInsurance,
   calculateCMHCInsurancePremium,
   calculateCMHCInsuranceRate,
   calculateMonthlyMortgagePayment,
@@ -173,24 +174,60 @@ describe('isDownPaymentLessThanMinimum', (): void => {
 });
 
 describe('Calculate CMHC Insurance Rate Calculations', (): void => {
-  test('should return 4.50% for down payment < 10%', (): void => {
-    expect(calculateCMHCInsuranceRate(300000, 15000)).toBe(0.045);
-    expect(calculateCMHCInsuranceRate(100000, 4000)).toBe(0.045);
+  test('should return 4.50% for down payment percentage < 10%', (): void => {
+    expect(calculateCMHCInsuranceRate(
+      300000,
+      15000,
+      (15000 / 300000) * 100
+    )).toBe(0.045);
+
+    expect(calculateCMHCInsuranceRate(
+      100000,
+      4000,
+      (4000 / 100000) * 100
+    )).toBe(0.045);
   });
 
-  test('should return 3.10% for down payment < 15%', (): void => {
-    expect(calculateCMHCInsuranceRate(300000, 30000)).toBe(0.031);
-    expect(calculateCMHCInsuranceRate(100000, 12000)).toBe(0.031);
+  test('should return 3.10% for down payment percentage < 15%', (): void => {
+    expect(calculateCMHCInsuranceRate(
+      300000,
+      30000,
+      (30000 / 300000) * 100
+    )).toBe(0.031);
+
+    expect(calculateCMHCInsuranceRate(
+      100000,
+      12000,
+      (12000 / 100000) * 100
+    )).toBe(0.031);
   });
 
-  test('should return 2.80% for down payment < 20%', (): void => {
-    expect(calculateCMHCInsuranceRate(300000, 45000)).toBe(0.028);
-    expect(calculateCMHCInsuranceRate(100000, 17000)).toBe(0.028);
+  test('should return 2.80% for down payment percentage < 20%', (): void => {
+    expect(calculateCMHCInsuranceRate(
+      300000,
+      45000,
+      (45000 / 300000) * 100
+    )).toBe(0.028);
+
+    expect(calculateCMHCInsuranceRate(
+      100000,
+      17000,
+      (17000 / 100000) * 100
+    )).toBe(0.028);
   });
 
-  test('should return 0% for down payment >= 20%', (): void => {
-    expect(calculateCMHCInsuranceRate(300000, 60000)).toBe(0);
-    expect(calculateCMHCInsuranceRate(100000, 22000)).toBe(0);
+  test('should return 0% for down payment percentage >= 20%', (): void => {
+    expect(calculateCMHCInsuranceRate(
+      300000,
+      60000,
+      (60000 / 300000) * 100
+    )).toBe(0);
+
+    expect(calculateCMHCInsuranceRate(
+      100000,
+      22000,
+      (22000 / 100000) * 100
+    )).toBe(0);
   });
 });
 
