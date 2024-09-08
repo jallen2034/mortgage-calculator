@@ -1,4 +1,7 @@
-export async function fetchMortgageCalculation(data: any): Promise<number> {
+import { CalculatedResult } from "@/app/api/calculate/types"
+
+// Helper function to make a APi call to the backend to calculate the mortgage.
+export async function fetchMortgageCalculation(data: any): Promise<CalculatedResult> {
   try {
     const response: Response = await fetch('http://localhost:3000/api/calculate', {
       method: 'POST',
@@ -9,12 +12,14 @@ export async function fetchMortgageCalculation(data: any): Promise<number> {
     });
 
     if (!response.ok) {
-      throw new Error('Network response was not ok');
+      const errorData = await response.json();
+      const errorMessage: string = errorData?.errorMessage || "An unknown error occurred.";
+      throw new Error(errorMessage);
     }
 
     return await response.json();
-  } catch (error) {
-    console.error('Error fetching data:', error);
+  } catch (error: any) {
+    console.error('Error fetching data:', error.message || error);
     throw error;
   }
 }
