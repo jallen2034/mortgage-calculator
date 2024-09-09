@@ -62,7 +62,7 @@ const MortgageCalculator = () => {
   };
 
   return (
-    <Container component="main" maxWidth="xs">
+    <Container component="main" maxWidth="s">
       <Box className="container">
         <Typography variant="h4" component="h1" className="title">
           Mortgage Calculator

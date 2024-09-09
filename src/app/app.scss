@@ -1,0 +1,46 @@
+.main {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  background-color: #f0f0f0;
+
+  .description {
+    text-align: center;
+    margin-bottom: 20px;
+
+    .homepageHeading {
+      color: black;
+    }
+
+    .buttonWrapper {
+      margin-top: 20px;
+
+      .calculatorButton {
+        padding: 0.75rem 1.5rem; // Same padding as the provided style
+        font-size: 1rem;
+        text-transform: lowercase;
+        font-weight: 500;
+        border-radius: 1.875rem; // Rounded corners
+        background-color: #007bff; // Primary blue background
+        color: #ffffff;
+        cursor: pointer;
+        border: none;
+        transition: background-color 0.3s ease, transform 0.2s, box-shadow 0.3s;
+        box-shadow: 0 0.25rem 0.5rem rgba(0, 0, 0, 0.2); // Shadow effect
+
+        &:hover {
+          background-color: #3f51b5; // Change on hover
+          transform: translateY(-2px); // Slight movement on hover
+        }
+
+        &:active {
+          background-color: #0069d9; // Slightly darker shade on active
+          box-shadow: 0 0.1rem 0.2rem rgba(0, 0, 0, 0.1);
+          transform: translateY(0); // Reset movement on click
+        }
+      }
+    }
+  }
+}
