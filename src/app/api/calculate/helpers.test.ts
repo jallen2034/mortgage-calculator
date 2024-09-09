@@ -8,10 +8,11 @@ import {
   getPeriodsPerYear,
   isDownPaymentLessThanMinimum, validateUserInputFromClient
 } from "@/app/api/calculate/helpers"
+import { ValidationErrorsFromAPI } from "@/app/api/calculate/types"
 
 describe('validateUserInputFromClient', (): void => {
   it('should return an error for invalid property price', (): void => {
-    const errors: Record<string, string> = validateUserInputFromClient(
+    const errors: ValidationErrorsFromAPI = validateUserInputFromClient(
       null,
       '1000',
       '5',
@@ -22,7 +23,7 @@ describe('validateUserInputFromClient', (): void => {
   });
 
   it('should return an error for invalid down payment', (): void => {
-    const errors: Record<string, string> = validateUserInputFromClient(
+    const errors: ValidationErrorsFromAPI = validateUserInputFromClient(
       '100000',
       '0',
       '5',
@@ -33,7 +34,7 @@ describe('validateUserInputFromClient', (): void => {
   });
 
   it('should return an error if down payment is less than 5%', (): void => {
-    const errors: Record<string, string> = validateUserInputFromClient(
+    const errors: ValidationErrorsFromAPI = validateUserInputFromClient(
       '100000',
       '4000',
       '5',
@@ -44,7 +45,7 @@ describe('validateUserInputFromClient', (): void => {
   });
 
   it('should return an error for invalid interest rate', (): void => {
-    const errors: Record<string, string> = validateUserInputFromClient(
+    const errors: ValidationErrorsFromAPI = validateUserInputFromClient(
       '100000',
       '5000',
       null,
@@ -55,7 +56,7 @@ describe('validateUserInputFromClient', (): void => {
   });
 
   it('should return an error if amortization period is not selected', (): void => {
-    const errors: Record<string, string> = validateUserInputFromClient(
+    const errors: ValidationErrorsFromAPI = validateUserInputFromClient(
       '100000',
       '5000',
       '5',
@@ -66,7 +67,7 @@ describe('validateUserInputFromClient', (): void => {
   });
 
   it('should return an error if payment schedule is not selected', (): void => {
-    const errors: Record<string, string> = validateUserInputFromClient(
+    const errors: ValidationErrorsFromAPI = validateUserInputFromClient(
       '100000',
       '5000',
       '5',
@@ -77,7 +78,7 @@ describe('validateUserInputFromClient', (): void => {
   });
 
   it('should return an empty object if all inputs are valid', (): void => {
-    const errors: Record<string, string> = validateUserInputFromClient(
+    const errors: ValidationErrorsFromAPI = validateUserInputFromClient(
       '100000',
       '5000',
       '5',
@@ -145,7 +146,10 @@ describe('calculateTotalNumberOfPaymentsOverAmortizationPeriod', (): void => {
     const periodsPerYear: number = 12; // Monthly payments.
     const amortizationPeriod: number = 30; // 30 years.
     const expectedPayments: number = 30 * 12; // 360 payments.
-    const result: number = calculateTotalNumberOfPaymentsOverAmortizationPeriod(periodsPerYear, amortizationPeriod);
+    const result: number = calculateTotalNumberOfPaymentsOverAmortizationPeriod(
+      periodsPerYear,
+      amortizationPeriod
+    );
     expect(result).toBe(expectedPayments); // Exact match expected.
   });
 
@@ -153,7 +157,10 @@ describe('calculateTotalNumberOfPaymentsOverAmortizationPeriod', (): void => {
     const periodsPerYear: number = 26; // Bi-weekly payments.
     const amortizationPeriod: number = 5; // 5 years.
     const expectedPayments: number = 5 * 26; // 130 payments.
-    const result: number = calculateTotalNumberOfPaymentsOverAmortizationPeriod(periodsPerYear, amortizationPeriod);
+    const result: number = calculateTotalNumberOfPaymentsOverAmortizationPeriod(
+      periodsPerYear,
+      amortizationPeriod
+    );
     expect(result).toBe(expectedPayments); // Exact match expected.
   });
 
@@ -161,7 +168,10 @@ describe('calculateTotalNumberOfPaymentsOverAmortizationPeriod', (): void => {
     const periodsPerYear: number = 52; // Weekly payments.
     const amortizationPeriod: number = 1; // 1 year.
     const expectedPayments: number = 1 * 52; // 52 payments.
-    const result: number = calculateTotalNumberOfPaymentsOverAmortizationPeriod(periodsPerYear, amortizationPeriod);
+    const result: number = calculateTotalNumberOfPaymentsOverAmortizationPeriod(
+      periodsPerYear,
+      amortizationPeriod
+    );
     expect(result).toBe(expectedPayments); // Exact match expected.
   });
 
@@ -169,7 +179,10 @@ describe('calculateTotalNumberOfPaymentsOverAmortizationPeriod', (): void => {
     const periodsPerYear: number = 0; // Zero periods per year.
     const amortizationPeriod: number = 10; // 10 years.
     const expectedPayments: number = 0; // Should be 0 payments.
-    const result: number = calculateTotalNumberOfPaymentsOverAmortizationPeriod(periodsPerYear, amortizationPeriod);
+    const result: number = calculateTotalNumberOfPaymentsOverAmortizationPeriod(
+      periodsPerYear,
+      amortizationPeriod
+    );
     expect(result).toBe(expectedPayments); // Exact match expected.
   });
 
@@ -177,7 +190,10 @@ describe('calculateTotalNumberOfPaymentsOverAmortizationPeriod', (): void => {
     const periodsPerYear: number = 12; // Monthly payments.
     const amortizationPeriod: number = 0; // 0 years.
     const expectedPayments: number = 0; // Should be 0 payments.
-    const result: number = calculateTotalNumberOfPaymentsOverAmortizationPeriod(periodsPerYear, amortizationPeriod);
+    const result: number = calculateTotalNumberOfPaymentsOverAmortizationPeriod(
+      periodsPerYear,
+      amortizationPeriod
+    );
     expect(result).toBe(expectedPayments); // Exact match expected.
   });
 });
@@ -197,7 +213,7 @@ describe('getPeriodsPerYear', () => {
 
   it('should throw an error for an invalid payment schedule', (): void => {
     expect((): void => {
-      // @ts-ignore - This line is intentionally incorrect to test invalid input
+      // @ts-expect-error - This line is intentionally incorrect to test invalid input
       getPeriodsPerYear("Invalid Schedule");
     }).toThrow('Invalid payment schedule: Invalid Schedule');
   });
@@ -252,18 +268,18 @@ describe('isDownPaymentLessThanMinimum', (): void => {
 });
 
 describe('Calculate CMHC Insurance Rate Calculations', (): void => {
-  test('should return 4.50% for down payment percentage < 10%', (): void => {
+  test('should return 4% for down payment percentage < 10%', (): void => {
     expect(calculateCMHCInsuranceRate(
       300000,
       15000,
       (15000 / 300000) * 100
-    )).toBe(0.045);
+    )).toBe(0.040);
 
     expect(calculateCMHCInsuranceRate(
       100000,
       4000,
       (4000 / 100000) * 100
-    )).toBe(0.045);
+    )).toBe(0.040);
   });
 
   test('should return 3.10% for down payment percentage < 15%', (): void => {
@@ -310,7 +326,7 @@ describe('Calculate CMHC Insurance Rate Calculations', (): void => {
 });
 
 describe("calculateCMHCInsurancePremium", (): void => {
-  it("should correctly calculate the insurance premium for a given rate and mortgage amount", () => {
+  it("should calculate the insurance premium for a given rate and mortgage amount", (): void => {
     const insuranceRate: number = 0.045; // 4.50%
     const mortgageAmountBeforeInsurance: number = 100000; // $100,000
 
