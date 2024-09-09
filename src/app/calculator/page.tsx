@@ -86,7 +86,7 @@ const MortgageCalculator = () => {
       {/* Main content */}
       <Box className="container">
         <Typography variant="h4" component="h1" className="title">
-          Mortgage Calculator
+          Calculate Your Mortgage Payments
         </Typography>
         <MortgageCalculatorForm
           {...{
@@ -98,7 +98,12 @@ const MortgageCalculator = () => {
           }}
         />
         {calculationResult &&
-          <MortgageResultCard{...{ calculationResult }} />
+          <>
+            <Typography variant="h4" component="h1" className="results">
+              Your Mortgage Calculation Results
+            </Typography>
+            <MortgageResultCard{...{ calculationResult }} />
+          </>
         }
       </Box>
     </Container>
