@@ -9,26 +9,27 @@ const validateUserInputFromClient = (
 ): ValidationErrorsFromAPI => {
   let errors: ValidationErrorsFromAPI = {};
 
-  // Validate Property Price
+  // Validate Property Price.
   if (!propertyPrice || propertyPrice <= 0) {
     errors.propertyPriceError = "You must submit a valid property price.";
   }
 
-  // Validate Interest Rate
+  // Validate Interest Rate.
   if (!interestRate || interestRate <= 0) {
     errors.interestRateError = "You must submit a valid interest rate.";
   }
 
-  // Validate Amortization Period
+  // Validate Amortization Period.
   if (!amortizationPeriod) {
     errors.amortizationPeriodError = "You must select an amortization period.";
   }
 
-  // Validate Payment Schedule
+  // Validate Payment Schedule.
   if (!paymentSchedule) {
     errors.paymentScheduleError = "You must select a payment schedule.";
   }
 
+  // Validate down payment.
   if (!downPayment || downPayment <= 0) {
     errors.downPaymentError = "You must submit a valid deposit.";
     return errors;
