@@ -6,10 +6,10 @@ import { AppRouterInstance } from "next/dist/shared/lib/app-router-context.share
 import "./app.scss";
 
 export default function Home() {
-  const router: AppRouterInstance = useRouter();  // Router instance for navigation
+  const router: AppRouterInstance = useRouter();
 
-  // Navigate to the /calculator route when the button is clicked
-  const handleButtonClick = () => {
+  // Navigate to the /calculator route when the button is clicked.
+  const handleButtonClick = (): void => {
     router.push('/calculator');
   };
 
@@ -19,7 +19,6 @@ export default function Home() {
         <Typography variant="h6" className="homepageHeading" gutterBottom>
           Calculate your mortgage quickly and easily.
         </Typography>
-        {/* Button with description and hover effect */}
         <Box className="buttonWrapper">
           <Button
             variant="contained"
