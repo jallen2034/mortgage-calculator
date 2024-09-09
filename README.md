@@ -12,6 +12,8 @@ React and Next.js provide a powerful UI and server-side framework,
 while TypeScript enhances code quality. SCSS and MUI contribute to a polished user experience,
 and Fetch and Jest support robust client-server communication and testing.
 
+![Screenshot of Mortgage Calculator](media/docs/mortgage-calculator-application-architecture.png)
+
 ## Frontend
 
 ### React with Next.js 13
