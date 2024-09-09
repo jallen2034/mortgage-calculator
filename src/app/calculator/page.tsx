@@ -33,8 +33,6 @@ const MortgageCalculator = () => {
   const [calculationResult, setCalculationResult] = useState<any | null>(null)
   const [errorFromAPI, setErrorFromAPI] = useState<any>(null)
 
-  console.log(calculationResult)
-
   // Handles updates to TextField inputs in the form. separation of concerns.
   const handleChangeTextField = (event: React.ChangeEvent<HTMLInputElement>): void => {
     const { id, value }: EventTarget = event.target
