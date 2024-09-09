@@ -16,6 +16,7 @@ const MortgageCalculatorForm = ({
     <form onSubmit={handleSubmit} className="form-box">
       <FormControl fullWidth margin="normal">
         <TextField
+          type="number"
           id="propertyPrice"
           label="Property Price ($CAD)"
           value={formState.propertyPrice}
@@ -27,6 +28,7 @@ const MortgageCalculatorForm = ({
       </FormControl>
       <FormControl fullWidth margin="normal">
         <TextField
+          type="number"
           id="downPayment"
           label="Down Payment ($CAD)"
           value={formState.downPayment}
@@ -38,6 +40,7 @@ const MortgageCalculatorForm = ({
       </FormControl>
       <FormControl fullWidth margin="normal">
         <TextField
+          type="number"
           id="interestRate"
           label="Annual Interest Rate (%)"
           value={formState.interestRate}
