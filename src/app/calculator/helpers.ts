@@ -1,25 +1,27 @@
 import { CalculatedResult } from "@/app/api/calculate/types"
+import { MortgageCalculatorFormState } from "@/app/calculator/types"
 
 // Helper function to make a APi call to the backend to calculate the mortgage.
-export async function fetchMortgageCalculation(data: any): Promise<CalculatedResult> {
+export async function fetchMortgageCalculation(
+  formState: MortgageCalculatorFormState
+): Promise<CalculatedResult | Record<string, string>> {
   try {
     const response: Response = await fetch('http://localhost:3000/api/calculate', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify(data),
+      body: JSON.stringify(formState),
     });
 
     if (!response.ok) {
       const errorData = await response.json();
-      const errorMessage: string = errorData?.errorMessage || "An unknown error occurred.";
-      throw new Error(errorMessage);
+      throw errorData?.errors || { errorMessage: "An unknown error occurred." };
     }
 
-    return await response.json();
-  } catch (error: any) {
-    console.error('Error fetching data:', error.message || error);
+    return await response.json(); // If the request is successful, return the calculated result.
+  } catch (error) {
+    console.error('Error fetching data:', error);
     throw error;
   }
 }

@@ -1,3 +1,47 @@
+const validateUserInputFromClient = (
+  propertyPrice: string | null,
+  downPayment: string | null,
+  interestRate: string | null,
+  amortizationPeriod: string | undefined,
+  paymentSchedule: string | undefined
+): Record<string, string> => {
+  let errors: Record<string, string> = {};
+
+  // Validate Property Price
+  if (!propertyPrice || propertyPrice <= 0) {
+    errors.propertyPrice = "You must submit a valid property price.";
+  }
+
+  // Validate Interest Rate
+  if (!interestRate || interestRate <= 0) {
+    errors.interestRate = "You must submit a valid interest rate.";
+  }
+
+  // Validate Amortization Period
+  if (!amortizationPeriod) {
+    errors.amortizationPeriod = "You must select an amortization period.";
+  }
+
+  // Validate Payment Schedule
+  if (!paymentSchedule) {
+    errors.paymentSchedule = "You must select a payment schedule.";
+  }
+
+  if (!downPayment || downPayment <= 0) {
+    errors.downPayment = "You must submit a valid deposit.";
+    return errors;
+  }
+
+  const downPaymentPercentage: number = (downPayment / propertyPrice) * 100;
+
+  // Validate the down payment is not less than 5%.
+  if (downPaymentPercentage < 5) {
+    errors.downPayment = "A deposit for a mortgage cannot be less than 5%!";
+  }
+
+  return errors;
+}
+
 /* Calculate the interest rate per payment period by dividing the annual interest rate
  * (as a decimal) by the number of periods per year.
  * Example: For an annual rate of 5% (0.05) and monthly payments (12 periods/year):
@@ -80,7 +124,7 @@ const isDownPaymentLessThanMinimum = (
   return downPayment < minimumDownPayment;
 }
 
-/* Calculate the monthly mortgage payment using the principal, interest rate per period, and total number of payments.
+/* Calculate monthly mortgage payment using the principal, interest rate per period, & total number of payments.
  * Formula: M = (P * r * (1 + r)^n) / ((1 + r)^n - 1)
  * - P: Principal amount
  * - r: Interest rate per period
@@ -134,5 +178,6 @@ export {
   calculateCMHCInsuranceRate,
   calculateCMHCInsurancePremium,
   applyCMHCInsurance,
-  calculateInsurancePremium
+  calculateInsurancePremium,
+  validateUserInputFromClient
 }
