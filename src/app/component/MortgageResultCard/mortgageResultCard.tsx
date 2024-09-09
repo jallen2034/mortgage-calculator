@@ -57,15 +57,18 @@ const MortgageResultCard = (
           ${calculationResult.monthlyMortgagePayment.toFixed(2)}
         </Typography>
       </div>
-      {/* CHMC Insurance. */}
+      {/* Always show if CHMC Insurance is required */}
+      <Typography variant="h6" className="resultLabel">Default Insurance</Typography>
+      <Divider />
+      <div className="resultItem">
+        <Typography variant="body1" className="resultLabel">CHMC Insurance Required:</Typography>
+        <Typography variant="body1" className="resultValue">
+          {calculationResult.needsCHMCInsurance ? "Yes" : "No"}
+        </Typography>
+      </div>
+      {/* Conditionally render the rate and premium only if CHMC Insurance is required */}
       {calculationResult.needsCHMCInsurance && (
         <>
-          <Typography variant="h6" className="resultLabel">CHMC Insurance</Typography>
-          <Divider />
-          <div className="resultItem">
-            <Typography variant="body1" className="resultLabel">CHMC Insurance Required:</Typography>
-            <Typography variant="body1" className="resultValue">Yes</Typography>
-          </div>
           <div className="resultItem">
             <Typography variant="body1" className="resultLabel">CHMC Insurance Rate:</Typography>
             <Typography variant="body1" className="resultValue">{calculationResult.CHMCInsuranceRate}%</Typography>

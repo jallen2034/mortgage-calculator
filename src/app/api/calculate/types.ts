@@ -5,7 +5,7 @@ export interface CalculatedResult {
   totalNumberOfPaymentsOverAmortization: number;
   needsCHMCInsurance: boolean;
   totalMortgageAmount: number;
-  downPayment: string;
+  downPayment: string | null;
   parsedPropertyPrice: number;
   downPaymentPercentage: number;
   payPeriodsPerYear: number;

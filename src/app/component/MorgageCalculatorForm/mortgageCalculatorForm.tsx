@@ -1,6 +1,6 @@
-import { Box, Button, FormControl, InputLabel, MenuItem, Select, TextField } from "@mui/material";
+import { Button, FormControl, InputLabel, MenuItem, Select, TextField } from "@mui/material";
 import { MortgageCalculatorFormProps } from "@/app/component/MorgageCalculatorForm/types";
-import React from "react"
+import React from "react";
 import "./mortgageCalculator.scss";
 
 const MortgageCalculatorForm = ({
@@ -10,8 +10,10 @@ const MortgageCalculatorForm = ({
   handleSubmit,
   errorFromAPI
 }: MortgageCalculatorFormProps) => {
+  const amortizationPeriods: number[] = [5, 10, 15, 20, 25, 30]
+
   return (
-    <Box component="form" onSubmit={handleSubmit} className="form-box">
+    <form onSubmit={handleSubmit} className="form-box">
       <FormControl fullWidth margin="normal">
         <TextField
           id="propertyPrice"
@@ -19,6 +21,8 @@ const MortgageCalculatorForm = ({
           value={formState.propertyPrice}
           onChange={handleChangeTextField}
           variant="outlined"
+          error={!!errorFromAPI?.propertyPrice}
+          helperText={errorFromAPI?.propertyPrice || ""}
         />
       </FormControl>
       <FormControl fullWidth margin="normal">
@@ -28,8 +32,8 @@ const MortgageCalculatorForm = ({
           value={formState.downPayment}
           onChange={handleChangeTextField}
           variant="outlined"
-          error={!!errorFromAPI}
-          helperText={errorFromAPI ? errorFromAPI : ""}
+          error={!!errorFromAPI?.downPayment}
+          helperText={errorFromAPI?.downPayment || ""}
         />
       </FormControl>
       <FormControl fullWidth margin="normal">
@@ -39,6 +43,8 @@ const MortgageCalculatorForm = ({
           value={formState.interestRate}
           onChange={handleChangeTextField}
           variant="outlined"
+          error={!!errorFromAPI?.interestRate}
+          helperText={errorFromAPI?.interestRate || ""}
         />
       </FormControl>
       <FormControl fullWidth margin="normal">
@@ -51,7 +57,7 @@ const MortgageCalculatorForm = ({
           label="Amortization Period"
           className="select"
         >
-          {[5, 10, 15, 20, 25, 30].map((year: number) => (
+          {amortizationPeriods.map((year: number) => (
             <MenuItem key={year} value={year}>
               {year} years
             </MenuItem>
@@ -80,7 +86,7 @@ const MortgageCalculatorForm = ({
       >
         Calculate
       </Button>
-    </Box>
+    </form>
   );
 };
 

@@ -10,7 +10,8 @@ import {
   calculateTotalNumberOfPaymentsOverAmortizationPeriod,
   convertInterestRateToDecimal,
   getPeriodsPerYear,
-  isDownPaymentLessThanMinimum
+  isDownPaymentLessThanMinimum,
+  validateUserInputFromClient
 } from "@/app/api/calculate/helpers"
 import { CalculatedResult } from "@/app/api/calculate/types"
 
@@ -25,12 +26,32 @@ export async function POST(request: NextRequest): Promise<CalculatedResult> {
       interestRate
     }: MortgageCalculatorFormState = await request.json();
 
-    // Validate inputs from the client to ensure they are not missing anything.
-    if (!propertyPrice || !amortizationPeriod || !downPayment || !interestRate || !paymentSchedule) {
-      throw new Error("Invalid input")
+    // Validate input fields.
+    const errors: Record<string, string> = validateUserInputFromClient(
+      propertyPrice,
+      downPayment,
+      interestRate,
+      amortizationPeriod,
+      paymentSchedule
+    );
+
+    // If there are validation errors, return 500 with the errors.
+    if (Object.keys(errors).length > 0) {
+      return NextResponseHandler({ errors }, 500);
     }
 
-    // Parse the incoming values to ensure they're numbers
+    // Ensure all values are of valid types before proceeding.
+    if (
+      propertyPrice === null || downPayment === null || interestRate === null ||
+      amortizationPeriod === undefined || paymentSchedule === undefined
+    ) {
+      return NextResponseHandler(
+        { errorMessage: "Invalid input. All fields are required." },
+        400
+      );
+    }
+
+    // Parse the incoming values to ensure they're numbers.
     const parsedPropertyPrice: number = parseFloat(propertyPrice);
     const parsedAmortizationPeriod: number = parseFloat(amortizationPeriod);
     const parsedDownPayment: number = parseFloat(downPayment);
@@ -41,13 +62,8 @@ export async function POST(request: NextRequest): Promise<CalculatedResult> {
     let CHMCInsuranceRate: number = 0;
     let insurancePremium: number = 0;
 
-    // Calculate the percentage of down payment
+    // Calculate the percentage of down payment.
     const downPaymentPercentage: number = (downPayment / propertyPrice) * 100;
-
-    // Validate that the down payment is not less than 5%. This is invalid.
-    if (downPaymentPercentage < 5) {
-      throw new Error("A deposit for a mortgage cannot be less than 5%!");
-    }
 
     // Determine the number of payment periods per year based on the payment schedule.
     const payPeriodsPerYear: number = getPeriodsPerYear(paymentSchedule);
