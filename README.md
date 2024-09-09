@@ -43,6 +43,9 @@ and Fetch and Jest support robust client-server communication and testing.
 ### Jest
 - A popular testing framework for JavaScript, suitable for unit testing logic such as mortgage calculations, with features like mocking and code coverage.
 
+### npm
+- Used for package management, ensuring that all dependencies are managed efficiently and consistently throughout the development process.
+
 ## Getting Started
 
 First, clone the repository and navigate into the project directory:

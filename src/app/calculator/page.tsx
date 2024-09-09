@@ -30,8 +30,8 @@ const MortgageCalculator = () => {
   });
 
   // State to store the result of the mortgage calculation and also any potential errors from the API.
-  const [calculationResult, setCalculationResult] = useState<any | null>(null);
-  const [errorFromAPI, setErrorFromAPI] = useState<any>(null);
+  const [calculationResult, setCalculationResult] = useState<CalculatedResultFromAPI | null>(null);
+  const [errorFromAPI, setErrorFromAPI] = useState<ValidationErrorsFromAPI>(null);
 
   // Handles updates to TextField inputs in the form. separation of concerns.
   const handleChangeTextField = (event: React.ChangeEvent<HTMLInputElement>): void => {
@@ -60,7 +60,7 @@ const MortgageCalculator = () => {
       const apiResult: CalculatedResultFromAPI | ValidationErrorsFromAPI =
         await fetchMortgageCalculationFromAPI(formState);
       setCalculationResult(apiResult as CalculatedResultFromAPI);
-    } catch (error: any) {
+    } catch (error) {
       console.error("An unexpected error occurred:", error);
       setErrorFromAPI(error);
     }
