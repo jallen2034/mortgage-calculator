@@ -6,8 +6,87 @@ import {
   calculateTotalNumberOfPaymentsOverAmortizationPeriod,
   convertInterestRateToDecimal,
   getPeriodsPerYear,
-  isDownPaymentLessThanMinimum
+  isDownPaymentLessThanMinimum, validateUserInputFromClient
 } from "@/app/api/calculate/helpers"
+
+describe('validateUserInputFromClient', (): void => {
+  it('should return an error for invalid property price', (): void => {
+    const errors: Record<string, string> = validateUserInputFromClient(
+      null,
+      '1000',
+      '5',
+      '20',
+      'Monthly'
+    );
+    expect(errors.propertyPriceError).toBe('You must submit a valid property price.');
+  });
+
+  it('should return an error for invalid down payment', (): void => {
+    const errors: Record<string, string> = validateUserInputFromClient(
+      '100000',
+      '0',
+      '5',
+      '20',
+      'Monthly'
+    );
+    expect(errors.downPaymentError).toBe('You must submit a valid deposit.');
+  });
+
+  it('should return an error if down payment is less than 5%', (): void => {
+    const errors: Record<string, string> = validateUserInputFromClient(
+      '100000',
+      '4000',
+      '5',
+      '20',
+      'Monthly'
+    );
+    expect(errors.downPaymentError).toBe('A deposit for a mortgage cannot be less than 5%!');
+  });
+
+  it('should return an error for invalid interest rate', (): void => {
+    const errors: Record<string, string> = validateUserInputFromClient(
+      '100000',
+      '5000',
+      null,
+      '20',
+      'Monthly'
+    );
+    expect(errors.interestRateError).toBe('You must submit a valid interest rate.');
+  });
+
+  it('should return an error if amortization period is not selected', (): void => {
+    const errors: Record<string, string> = validateUserInputFromClient(
+      '100000',
+      '5000',
+      '5',
+      undefined,
+      'Monthly'
+    );
+    expect(errors.amortizationPeriodError).toBe('You must select an amortization period.');
+  });
+
+  it('should return an error if payment schedule is not selected', (): void => {
+    const errors: Record<string, string> = validateUserInputFromClient(
+      '100000',
+      '5000',
+      '5',
+      '20',
+      undefined
+    );
+    expect(errors.paymentScheduleError).toBe('You must select a payment schedule.');
+  });
+
+  it('should return an empty object if all inputs are valid', (): void => {
+    const errors: Record<string, string> = validateUserInputFromClient(
+      '100000',
+      '5000',
+      '5',
+      '20',
+      'Monthly'
+    );
+    expect(errors).toEqual({});
+  });
+});
 
 // Unit tests for the `calculatePerPaymentScheduleInterestRate` function to verify correct computation of interest rates (r).
 describe('calculatePerPaymentScheduleInterestRate', (): void => {
