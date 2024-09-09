@@ -59,7 +59,7 @@ export async function POST(
       parsedInterestRate,
       parsedAmortizationPeriod,
       paymentSchedule
-    )
+    );
 
     // Return the calculated monthly mortgage payment in the success response.
     return NextResponseHandler(APIResponsePayload, 200);

@@ -80,7 +80,7 @@ const calculateTotalNumberOfPaymentsOverAmortizationPeriod = (
 /* Convert an annual interest rate percentage to a decimal. Example: For an annual rate of 5%:
  * 5 / 100 = 0.05. */
 const convertInterestRateToDecimal = (annualInterestRate: number): number => {
-  return annualInterestRate / 100
+  return annualInterestRate / 100;
 }
 
 // Determine the number of payment periods per year based on the payment schedule.

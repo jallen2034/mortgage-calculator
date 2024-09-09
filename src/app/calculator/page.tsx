@@ -18,7 +18,7 @@ import "./styles.scss"
 
 const MortgageCalculator = () => {
   // Initialize router for navigation.
-  const router: AppRouterInstance = useRouter()
+  const router: AppRouterInstance = useRouter();
 
   // Consider using a custom hook if the form state management becomes more complex for better organization.
   const [formState, setFormState] = useState<MortgageCalculatorFormState>({
@@ -27,48 +27,48 @@ const MortgageCalculator = () => {
     interestRate: "",
     amortizationPeriod: "5",
     paymentSchedule: "Monthly"
-  })
+  });
 
   // State to store the result of the mortgage calculation and also any potential errors from the API.
-  const [calculationResult, setCalculationResult] = useState<any | null>(null)
-  const [errorFromAPI, setErrorFromAPI] = useState<any>(null)
+  const [calculationResult, setCalculationResult] = useState<any | null>(null);
+  const [errorFromAPI, setErrorFromAPI] = useState<any>(null);
 
   // Handles updates to TextField inputs in the form. separation of concerns.
   const handleChangeTextField = (event: React.ChangeEvent<HTMLInputElement>): void => {
-    const { id, value }: EventTarget = event.target
-    setErrorFromAPI(null)
+    const { id, value }: EventTarget = event.target;
+    setErrorFromAPI(null);
     setFormState((prevState: MortgageCalculatorFormState): MortgageCalculatorFormState => ({
       ...prevState,
       [id]: value
-    }))
+    }));
   }
 
   // Handles updates to Select inputs in the form. separation of concerns.
   const handleChangeSelect = (event: SelectChangeEvent<unknown>, child: React.ReactNode): void => {
-    const { name, value }: EventTarget = event.target
-    if (!name) return
+    const { name, value }: EventTarget = event.target;
+    if (!name) return;
     setFormState((prevState: MortgageCalculatorFormState): MortgageCalculatorFormState => ({
       ...prevState,
       [name]: value
-    }))
+    }));
   }
 
   // Submits the form and fetches mortgage calculation results from the API.
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>): Promise<void> => {
     try {
-      event.preventDefault()
+      event.preventDefault();
       const apiResult: CalculatedResultFromAPI | ValidationErrorsFromAPI =
-        await fetchMortgageCalculationFromAPI(formState)
-      setCalculationResult(apiResult as CalculatedResultFromAPI)
+        await fetchMortgageCalculationFromAPI(formState);
+      setCalculationResult(apiResult as CalculatedResultFromAPI);
     } catch (error: any) {
-      console.error("An unexpected error occurred:", error)
-      setErrorFromAPI(error)
+      console.error("An unexpected error occurred:", error);
+      setErrorFromAPI(error);
     }
   }
 
   // Handle button click to go back to the homepage.
-  const handleBackToHome = () => {
-    router.push("/")
+  const handleBackToHome = (): void => {
+    router.push("/");
   }
 
   return (
