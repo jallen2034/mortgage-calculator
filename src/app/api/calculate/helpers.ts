@@ -39,7 +39,7 @@ const validateUserInputFromClient = (
 
   // Validate the down payment is not less than 5%.
   if (downPaymentPercentage < 5) {
-    errors.downPaymentError = "A deposit for a mortgage cannot be less than 5%!";
+    errors.downPaymentError = "A deposit for a mortgage cannot be less than 5%";
   }
 
   return errors;
@@ -248,7 +248,8 @@ export function calculateMortgageDetails(
     CHMCInsuranceRate,
     insurancePremium,
     downPaymentPercentage,
-    downPayment
+    downPayment,
+    paymentSchedule
   };
 }
 

@@ -2,6 +2,7 @@ import React from "react";
 import { Typography, Divider } from "@mui/material";
 import { MortgageResultCardProps } from "@/app/component/MortgageResultCard/types";
 import "./mortgageResultCard.scss";
+import { formatCurrency } from "@/app/component/MortgageResultCard/helpers"
 
 const MortgageResultCard = ({ calculationResult }: MortgageResultCardProps) => {
   return (
@@ -16,7 +17,7 @@ const MortgageResultCard = ({ calculationResult }: MortgageResultCardProps) => {
           Total Mortgage Amount:
         </Typography>
         <Typography variant="body1" className="resultValue">
-          ${calculationResult.totalMortgageAmount.toFixed(2)}
+          {formatCurrency(calculationResult.totalMortgageAmount)}
         </Typography>
       </div>
       <div className="resultItem">
@@ -24,7 +25,7 @@ const MortgageResultCard = ({ calculationResult }: MortgageResultCardProps) => {
           Down Payment Amount:
         </Typography>
         <Typography variant="body1" className="resultValue">
-          ${calculationResult.downPayment}
+          {formatCurrency(calculationResult.downPayment)}
         </Typography>
       </div>
       <div className="resultItem">
@@ -37,10 +38,18 @@ const MortgageResultCard = ({ calculationResult }: MortgageResultCardProps) => {
       </div>
       <div className="resultItem">
         <Typography variant="body1" className="resultValue">
-          Monthly Mortgage Payment:
+          Mortgage Payment Period:
         </Typography>
         <Typography variant="body1" className="resultValue">
-          ${calculationResult.monthlyMortgagePayment.toFixed(2)}
+          {calculationResult.paymentSchedule}
+        </Typography>
+      </div>
+      <div className="resultItem">
+        <Typography variant="body1" className="resultValue">
+          Mortgage Payment Per Payment Period:
+        </Typography>
+        <Typography variant="body1" className="resultValue">
+          {formatCurrency(calculationResult.monthlyMortgagePayment)}
         </Typography>
       </div>
       {/* Default Insurance */}
@@ -72,7 +81,7 @@ const MortgageResultCard = ({ calculationResult }: MortgageResultCardProps) => {
               CHMC Insurance Premium:
             </Typography>
             <Typography variant="body1" className="resultValue">
-              ${calculationResult.insurancePremium}
+              {formatCurrency(calculationResult.insurancePremium)}
             </Typography>
           </div>
         </>
