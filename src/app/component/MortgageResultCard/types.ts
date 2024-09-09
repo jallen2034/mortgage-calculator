@@ -1,5 +1,5 @@
-import { CalculatedResult } from "@/app/api/calculate/types"
+import { CalculatedResultFromAPI } from "@/app/api/calculate/types"
 
 export interface MortgageResultCardProps {
-  calculationResult: CalculatedResult
+  calculationResult: CalculatedResultFromAPI
 }
