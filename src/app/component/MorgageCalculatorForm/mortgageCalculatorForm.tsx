@@ -10,14 +10,14 @@ const MortgageCalculatorForm = ({
   handleSubmit,
   errorFromAPI
 }: MortgageCalculatorFormProps) => {
-  const amortizationPeriods: number[] = [5, 10, 15, 20, 25, 30]
+  const amortizationPeriods: number[] = [5, 10, 15, 20, 25, 30];
 
   return (
     <form onSubmit={handleSubmit} className="form-box">
       <FormControl fullWidth margin="normal">
         <TextField
           id="propertyPrice"
-          label="Property Price"
+          label="Property Price ($CAD)"
           value={formState.propertyPrice}
           onChange={handleChangeTextField}
           variant="outlined"
@@ -28,7 +28,7 @@ const MortgageCalculatorForm = ({
       <FormControl fullWidth margin="normal">
         <TextField
           id="downPayment"
-          label="Down Payment"
+          label="Down Payment ($CAD)"
           value={formState.downPayment}
           onChange={handleChangeTextField}
           variant="outlined"
@@ -39,7 +39,7 @@ const MortgageCalculatorForm = ({
       <FormControl fullWidth margin="normal">
         <TextField
           id="interestRate"
-          label="Annual Interest Rate"
+          label="Annual Interest Rate (%)"
           value={formState.interestRate}
           onChange={handleChangeTextField}
           variant="outlined"
