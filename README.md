@@ -14,6 +14,22 @@ and Fetch and Jest support robust client-server communication and testing.
 
 ![Screenshot of Mortgage Calculator](media/docs/mortgage-calculator-application-architecture.png)
 
+## Project Requirements
+
+Ensure you have the following versions of Node.js and npm installed:
+
+- Node.js: v16.20.2 
+- npm: 8.19.4
+
+You can check your versions with:
+
+```bash
+node -v
+npm -v
+```
+
+If you need to install or update Node.js and npm, consider using nvm to manage your versions.
+
 ## Frontend
 
 ### React with Next.js 13
