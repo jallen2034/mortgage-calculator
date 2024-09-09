@@ -41,7 +41,7 @@ describe('validateUserInputFromClient', (): void => {
       '20',
       'Monthly'
     );
-    expect(errors.downPaymentError).toBe('A deposit for a mortgage cannot be less than 5%!');
+    expect(errors.downPaymentError).toBe('A deposit for a mortgage cannot be less than 5%');
   });
 
   it('should return an error for invalid interest rate', (): void => {
