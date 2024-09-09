@@ -7,6 +7,7 @@ import {
 } from "@/app/api/calculate/helpers"
 import { CalculatedResultFromAPI, ValidationErrorsFromAPI } from "@/app/api/calculate/types"
 
+// API route to calculate mortgage details based on user input.
 export async function POST(
   request: NextRequest
 ): Promise<NextResponse<CalculatedResultFromAPI | ValidationErrorsFromAPI>> {
@@ -29,7 +30,7 @@ export async function POST(
       paymentSchedule
     );
 
-    // If there are validation errors, return 500 with the errors.
+    // If there are validation errors, return a 500 with the errors.
     if (Object.keys(errors).length > 0) {
       return NextResponseHandler({ errors }, 500);
     }

@@ -99,7 +99,9 @@ const getPeriodsPerYear = (
   }
 }
 
-// Calculate the CMHC insurance rate based on the down payment percentage.
+/* Calculate the CMHC insurance rate based on the down payment percentage.
+ * Calculates this according to the British Columbia Mortgage Default Insurance Rates.
+ * https://www.ratehub.ca/cmhc-insurance-british-columbia */
 const calculateCMHCInsuranceRate = (
   propertyPrice: number,
   downPayment: number,
@@ -107,7 +109,7 @@ const calculateCMHCInsuranceRate = (
 ): number => {
   switch (true) {
     case downPaymentPercentage < 10:
-      return 0.045; // 4.50%
+      return 0.040; // 4%
     case downPaymentPercentage < 15:
       return 0.031; // 3.10%
     case downPaymentPercentage < 20:
