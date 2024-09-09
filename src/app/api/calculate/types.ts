@@ -10,7 +10,8 @@ export interface CalculatedResultFromAPI {
   downPaymentPercentage: number;
   payPeriodsPerYear: number;
   convertedDecimalInterestRate: number;
-  CHMCInsuranceRate: number
+  CHMCInsuranceRate: number;
+  paymentSchedule: "Monthly" | "Bi-Weekly" | "Accelerated Bi-Weekly";
 }
 
 export interface ValidationErrorsFromAPI {

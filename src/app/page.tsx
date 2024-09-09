@@ -16,8 +16,12 @@ export default function Home() {
   return (
     <main className="main">
       <div className="description">
-        <Typography variant="h6" className="homepageHeading" gutterBottom>
+        <Typography variant="h4" className="homepageHeading" gutterBottom>
           Calculate your mortgage quickly and easily.
+        </Typography>
+        <Typography variant="body1" className="descriptionText" paragraph>
+          This calculator determines your mortgage payment and provides you with a mortgage payment schedule.
+          The calculator also shows how much money and how many years you can save by making prepayments.
         </Typography>
         <Box className="buttonWrapper">
           <Button
