@@ -124,7 +124,7 @@ _The home page of the Mortgage Calculator application._
 ![Screenshot of Mortgage Calculator](media/screenshots/screencapture-localhost-3000-calculator-2024-09-09-14_19_10.png)
 _The main page of the Mortgage Calculator where users can input their mortgage details._
 
-Mortgage Calculator with all Validation Errors:
+**Mortgage Calculator with all Validation Errors:**
 
 ![Screenshot of Mortgage Calculator](media/screenshots/screencapture-localhost-3000-calculator-2024-09-09-14_19_19.png)
 _The Mortgage Calculator page displaying validation errors for user inputs._
