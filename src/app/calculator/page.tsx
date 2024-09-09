@@ -51,16 +51,10 @@ const MortgageCalculator = () => {
     try {
       event.preventDefault();
       const apiResult: CalculatedResult | Record<string, string> = await fetchMortgageCalculation(formState);
-
-      // If the result is an error object, we have run into validation errors from the API.
-      if ('propertyPrice' in apiResult || 'downPayment' in apiResult || 'interestRate' in apiResult) {
-        setErrorFromAPI(apiResult as Record<string, string>);
-      } else {
-        setCalculationResult(apiResult as CalculatedResult);
-      }
+      setCalculationResult(apiResult as CalculatedResult);
     } catch (error: any) {
-      console.error("An error occurred:", error);
-      setErrorFromAPI(error); // Set general API error if not validation-specific.
+      console.error("An unexpected error occurred:", error);
+      setErrorFromAPI(error);
     }
   };
 

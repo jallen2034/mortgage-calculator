@@ -9,26 +9,26 @@ const validateUserInputFromClient = (
 
   // Validate Property Price
   if (!propertyPrice || propertyPrice <= 0) {
-    errors.propertyPrice = "You must submit a valid property price.";
+    errors.propertyPriceError = "You must submit a valid property price.";
   }
 
   // Validate Interest Rate
   if (!interestRate || interestRate <= 0) {
-    errors.interestRate = "You must submit a valid interest rate.";
+    errors.interestRateError = "You must submit a valid interest rate.";
   }
 
   // Validate Amortization Period
   if (!amortizationPeriod) {
-    errors.amortizationPeriod = "You must select an amortization period.";
+    errors.amortizationPeriodError = "You must select an amortization period.";
   }
 
   // Validate Payment Schedule
   if (!paymentSchedule) {
-    errors.paymentSchedule = "You must select a payment schedule.";
+    errors.paymentScheduleError = "You must select a payment schedule.";
   }
 
   if (!downPayment || downPayment <= 0) {
-    errors.downPayment = "You must submit a valid deposit.";
+    errors.downPaymentError = "You must submit a valid deposit.";
     return errors;
   }
 
@@ -36,7 +36,7 @@ const validateUserInputFromClient = (
 
   // Validate the down payment is not less than 5%.
   if (downPaymentPercentage < 5) {
-    errors.downPayment = "A deposit for a mortgage cannot be less than 5%!";
+    errors.downPaymentError = "A deposit for a mortgage cannot be less than 5%!";
   }
 
   return errors;

@@ -21,8 +21,8 @@ const MortgageCalculatorForm = ({
           value={formState.propertyPrice}
           onChange={handleChangeTextField}
           variant="outlined"
-          error={!!errorFromAPI?.propertyPrice}
-          helperText={errorFromAPI?.propertyPrice || ""}
+          error={!!errorFromAPI?.propertyPriceError}
+          helperText={errorFromAPI?.propertyPriceError || ""}
         />
       </FormControl>
       <FormControl fullWidth margin="normal">
@@ -32,8 +32,8 @@ const MortgageCalculatorForm = ({
           value={formState.downPayment}
           onChange={handleChangeTextField}
           variant="outlined"
-          error={!!errorFromAPI?.downPayment}
-          helperText={errorFromAPI?.downPayment || ""}
+          error={!!errorFromAPI?.downPaymentError}
+          helperText={errorFromAPI?.downPaymentError || ""}
         />
       </FormControl>
       <FormControl fullWidth margin="normal">
@@ -43,8 +43,8 @@ const MortgageCalculatorForm = ({
           value={formState.interestRate}
           onChange={handleChangeTextField}
           variant="outlined"
-          error={!!errorFromAPI?.interestRate}
-          helperText={errorFromAPI?.interestRate || ""}
+          error={!!errorFromAPI?.interestRateError}
+          helperText={errorFromAPI?.interestRateError || ""}
         />
       </FormControl>
       <FormControl fullWidth margin="normal">
