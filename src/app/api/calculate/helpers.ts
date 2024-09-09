@@ -1,32 +1,35 @@
+import { CalculatedResultFromAPI, ValidationErrorsFromAPI } from "@/app/api/calculate/types"
+
 const validateUserInputFromClient = (
   propertyPrice: string | null,
   downPayment: string | null,
   interestRate: string | null,
   amortizationPeriod: string | undefined,
   paymentSchedule: string | undefined
-): Record<string, string> => {
-  let errors: Record<string, string> = {};
+): ValidationErrorsFromAPI => {
+  let errors: ValidationErrorsFromAPI = {};
 
-  // Validate Property Price
+  // Validate Property Price.
   if (!propertyPrice || propertyPrice <= 0) {
     errors.propertyPriceError = "You must submit a valid property price.";
   }
 
-  // Validate Interest Rate
+  // Validate Interest Rate.
   if (!interestRate || interestRate <= 0) {
     errors.interestRateError = "You must submit a valid interest rate.";
   }
 
-  // Validate Amortization Period
+  // Validate Amortization Period.
   if (!amortizationPeriod) {
     errors.amortizationPeriodError = "You must select an amortization period.";
   }
 
-  // Validate Payment Schedule
+  // Validate Payment Schedule.
   if (!paymentSchedule) {
     errors.paymentScheduleError = "You must select a payment schedule.";
   }
 
+  // Validate down payment.
   if (!downPayment || downPayment <= 0) {
     errors.downPaymentError = "You must submit a valid deposit.";
     return errors;
@@ -166,6 +169,85 @@ const applyCMHCInsurance = (
   insurancePremium: number
 ): number => {
   return currentMortgageAmount + insurancePremium;
+}
+
+export function calculateMortgageDetails(
+  propertyPrice: number,
+  downPayment: number,
+  interestRate: number,
+  amortizationPeriod: number,
+  paymentSchedule: "Monthly" | "Bi-Weekly" | "Accelerated Bi-Weekly"
+): CalculatedResultFromAPI {
+  // Calculate the mortgage amount before insurance is applied.
+  let totalMortgageAmount: number = propertyPrice - downPayment;
+  let CHMCInsuranceRate: number = 0;
+  let insurancePremium: number = 0;
+
+  // Calculate the percentage of down payment.
+  const downPaymentPercentage: number = (downPayment / propertyPrice) * 100;
+
+  // Determine the number of payment periods per year based on the payment schedule.
+  const payPeriodsPerYear: number = getPeriodsPerYear(paymentSchedule);
+
+  // Convert the annual interest rate percentage to a decimal.
+  const convertedDecimalInterestRate: number = convertInterestRateToDecimal(interestRate);
+
+  // Calculate the interest rate per payment period based on the annual rate and payment frequency (r).
+  const perPaymentScheduleInterestRate: number = calculatePerPaymentScheduleInterestRate(
+    convertedDecimalInterestRate,
+    payPeriodsPerYear
+  );
+
+  // Calculate the total number of payments over the amortization period (n).
+  const totalNumberOfPaymentsOverAmortization: number = calculateTotalNumberOfPaymentsOverAmortizationPeriod(
+    payPeriodsPerYear,
+    amortizationPeriod
+  );
+
+  // Determine if CMHC insurance is needed.
+  const needsCHMCInsurance: boolean = isDownPaymentLessThanMinimum(propertyPrice, downPayment);
+
+  // If CMHC insurance is needed, apply it to the mortgage amount.
+  if (needsCHMCInsurance) {
+    CHMCInsuranceRate = calculateCMHCInsuranceRate(
+      propertyPrice,
+      downPayment,
+      downPaymentPercentage
+    );
+    insurancePremium = calculateInsurancePremium(
+      propertyPrice,
+      downPayment,
+      CHMCInsuranceRate
+    );
+    totalMortgageAmount = applyCMHCInsurance(
+      propertyPrice,
+      downPayment,
+      totalMortgageAmount,
+      insurancePremium
+    );
+  }
+
+  // Calculate the mortgage payment amount per payment schedule (M).
+  const monthlyMortgagePayment: number = calculateMonthlyMortgagePayment(
+    totalMortgageAmount,
+    totalNumberOfPaymentsOverAmortization,
+    perPaymentScheduleInterestRate
+  );
+
+  return {
+    monthlyMortgagePayment,
+    needsCHMCInsurance,
+    totalMortgageAmount,
+    totalNumberOfPaymentsOverAmortization,
+    perPaymentScheduleInterestRate,
+    convertedDecimalInterestRate,
+    payPeriodsPerYear,
+    parsedPropertyPrice: propertyPrice,
+    CHMCInsuranceRate,
+    insurancePremium,
+    downPaymentPercentage,
+    downPayment
+  };
 }
 
 export {

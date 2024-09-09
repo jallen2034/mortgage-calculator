@@ -71,11 +71,20 @@ const MortgageResultCard = (
         <>
           <div className="resultItem">
             <Typography variant="body1" className="resultLabel">CHMC Insurance Rate:</Typography>
-            <Typography variant="body1" className="resultValue">{calculationResult.CHMCInsuranceRate}%</Typography>
+            <Typography
+              variant="body1"
+              className="resultValue"
+            >
+              {calculationResult.CHMCInsuranceRate}%
+            </Typography>
           </div>
           <div className="resultItem">
             <Typography variant="body1" className="resultLabel">CHMC Insurance Premium:</Typography>
-            <Typography variant="body1" className="resultValue">${calculationResult.insurancePremium}</Typography>
+            <Typography
+              variant="body1"
+              className="resultValue"
+            >${calculationResult.insurancePremium}
+            </Typography>
           </div>
         </>
       )}

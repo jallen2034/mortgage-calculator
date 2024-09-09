@@ -1,10 +1,10 @@
-import { CalculatedResult } from "@/app/api/calculate/types"
+import { CalculatedResultFromAPI, ValidationErrorsFromAPI } from "@/app/api/calculate/types"
 import { MortgageCalculatorFormState } from "@/app/calculator/types"
 
 // Helper function to make a APi call to the backend to calculate the mortgage.
-export async function fetchMortgageCalculation(
+export async function fetchMortgageCalculationFromAPI(
   formState: MortgageCalculatorFormState
-): Promise<CalculatedResult | Record<string, string>> {
+): Promise<CalculatedResultFromAPI | ValidationErrorsFromAPI> {
   try {
     const response: Response = await fetch('http://localhost:3000/api/calculate', {
       method: 'POST',

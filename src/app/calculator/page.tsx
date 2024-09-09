@@ -6,14 +6,14 @@ import {
   Container, SelectChangeEvent,
 } from "@mui/material"
 import { MortgageCalculatorFormState } from "@/app/calculator/types"
-import { CalculatedResult } from "@/app/api/calculate/types"
-import { fetchMortgageCalculation } from "@/app/calculator/helpers";
+import { CalculatedResultFromAPI, ValidationErrorsFromAPI } from "@/app/api/calculate/types"
+import { fetchMortgageCalculationFromAPI } from "@/app/calculator/helpers";
 import MortgageResultCard from "@/app/component/MortgageResultCard/mortgageResultCard"
 import MortgageCalculatorForm from "@/app/component/MorgageCalculatorForm/mortgageCalculatorForm"
 import './styles.scss';
 
 const MortgageCalculator = () => {
-  // Consider using a custom hook if form state management becomes more complex for better organization.
+  // Consider using a custom hook if the form state management becomes more complex for better organization.
   const [formState, setFormState] = useState<MortgageCalculatorFormState>({
     propertyPrice: '',
     downPayment: '',
@@ -50,8 +50,11 @@ const MortgageCalculator = () => {
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>): Promise<void> => {
     try {
       event.preventDefault();
-      const apiResult: CalculatedResult | Record<string, string> = await fetchMortgageCalculation(formState);
-      setCalculationResult(apiResult as CalculatedResult);
+      const apiResult: CalculatedResultFromAPI | ValidationErrorsFromAPI =
+        await fetchMortgageCalculationFromAPI(formState);
+
+      // Set the successful API result into state.
+      setCalculationResult(apiResult as CalculatedResultFromAPI);
     } catch (error: any) {
       console.error("An unexpected error occurred:", error);
       setErrorFromAPI(error);
