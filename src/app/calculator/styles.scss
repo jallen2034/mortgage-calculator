@@ -3,15 +3,43 @@
   font-size: 16px;
 }
 
+.backButton {
+  position: absolute;
+  top: 1rem;
+  left: 1rem;
+  padding: 0.75rem 1.5rem;
+  border-radius: 1.875rem;  // Rounded corners
+  background-color: #5f3db6;  // Closer to blue-purple
+  color: #ffffff;
+  font-size: 1rem;
+  font-weight: 500;
+  border: none;
+  cursor: pointer;
+  text-transform: lowercase;
+  transition: background-color 0.3s, transform 0.2s, box-shadow 0.3s;
+  box-shadow: 0 0.25rem 0.5rem rgba(0, 0, 0, 0.2);  // Slight shadow
+
+  &:hover {
+    background-color: #5335a0;  // Darker purple-blue on hover
+    transform: translateY(-2px);  // Slight movement on hover
+  }
+
+  &:active {
+    background-color: #472f8a;  // Even darker on active
+    box-shadow: none;  // No shadow on active
+    transform: translateY(0);  // Reset movement on click
+  }
+}
+
 .container {
   display: flex;
   flex-direction: column;
   align-items: center;
   padding: 1.875rem;
   max-width: 40rem;
-  margin: 2.5rem auto;
+  margin: 6.5rem auto;
   border: 0.0625rem solid #e0e0e0;
-  border-radius: 0.625rem;
+  border-radius: 1.5rem;
   background-color: #f6f6f6;
   box-shadow: 0 0.125rem 0.625rem rgba(0, 0, 0, 0.1);
 }

@@ -10,11 +10,11 @@ const MortgageResultCard = (
     <div className="resultCard">
       {/* Mortgage Overview. */}
       <Typography variant="h6" className="resultLabel">Mortgage Overview</Typography>
-      <Divider />
+      <Divider className="divider" />
       <div className="resultItem">
         <Typography
           variant="body1"
-          className="resultLabel"
+          className="resultValue"
         >Total Mortgage Amount:</Typography>
         <Typography
           variant="body1"
@@ -25,7 +25,7 @@ const MortgageResultCard = (
       <div className="resultItem">
         <Typography
           variant="body1"
-          className="resultLabel">
+          className="resultValue">
           Down Payment Amount:
         </Typography>
         <Typography
@@ -38,7 +38,7 @@ const MortgageResultCard = (
       <div className="resultItem">
         <Typography
           variant="body1"
-          className="resultLabel">
+          className="resultValue">
           Down Payment Percentage:
         </Typography>
         <Typography
@@ -49,7 +49,7 @@ const MortgageResultCard = (
         </Typography>
       </div>
       <div className="resultItem">
-        <Typography variant="body1" className="resultLabel">Monthly Mortgage Payment:</Typography>
+        <Typography variant="body1" className="resultValue">Monthly Mortgage Payment:</Typography>
         <Typography
           variant="body1"
           className="resultValue"
@@ -59,9 +59,9 @@ const MortgageResultCard = (
       </div>
       {/* Always show if CHMC Insurance is required */}
       <Typography variant="h6" className="resultLabel">Default Insurance</Typography>
-      <Divider />
+      <Divider className="divider" />
       <div className="resultItem">
-        <Typography variant="body1" className="resultLabel">CHMC Insurance Required:</Typography>
+        <Typography variant="body1" className="resultValue">CHMC Insurance Required:</Typography>
         <Typography variant="body1" className="resultValue">
           {calculationResult.needsCHMCInsurance ? "Yes" : "No"}
         </Typography>
@@ -70,7 +70,7 @@ const MortgageResultCard = (
       {calculationResult.needsCHMCInsurance && (
         <>
           <div className="resultItem">
-            <Typography variant="body1" className="resultLabel">CHMC Insurance Rate:</Typography>
+            <Typography variant="body1" className="resultValue">CHMC Insurance Rate:</Typography>
             <Typography
               variant="body1"
               className="resultValue"
@@ -79,7 +79,7 @@ const MortgageResultCard = (
             </Typography>
           </div>
           <div className="resultItem">
-            <Typography variant="body1" className="resultLabel">CHMC Insurance Premium:</Typography>
+            <Typography variant="body1" className="resultValue">CHMC Insurance Premium:</Typography>
             <Typography
               variant="body1"
               className="resultValue"
@@ -90,9 +90,9 @@ const MortgageResultCard = (
       )}
       {/* Term and Amortization. */}
       <Typography variant="h6" className="resultLabel">Amortization</Typography>
-      <Divider />
+      <Divider className="divider" />
       <div className="resultItem">
-        <Typography variant="body1" className="resultLabel">Amortization Payments:</Typography>
+        <Typography variant="body1" className="resultValue">Amortization Payments:</Typography>
         <Typography
           variant="body1"
           className="resultValue"
@@ -102,9 +102,9 @@ const MortgageResultCard = (
       </div>
       {/* Interest Rates. */}
       <Typography variant="h6" className="resultLabel">Interest Rates</Typography>
-      <Divider />
+      <Divider className="divider" />
       <div className="resultItem">
-        <Typography variant="body1" className="resultLabel">Interest Rate (per payment):</Typography>
+        <Typography variant="body1" className="resultValue">Interest Rate (per payment):</Typography>
         <Typography
           variant="body1"
           className="resultValue"
@@ -113,7 +113,7 @@ const MortgageResultCard = (
         </Typography>
       </div>
       <div className="resultItem">
-        <Typography variant="body1" className="resultLabel">Annual Interest Rate (converted):</Typography>
+        <Typography variant="body1" className="resultValue">Annual Interest Rate (converted):</Typography>
         <Typography
           variant="body1"
           className="resultValue"
@@ -123,9 +123,9 @@ const MortgageResultCard = (
       </div>
       {/* Payment Details */}
       <Typography variant="h6" className="resultLabel">Payment Schedule</Typography>
-      <Divider />
+      <Divider className="divider" />
       <div className="resultItem">
-        <Typography variant="body1" className="resultLabel">Payment Periods per Year:</Typography>
+        <Typography variant="body1" className="resultValue">Payment Periods per Year:</Typography>
         <Typography variant="body1" className="resultValue">{calculationResult.payPeriodsPerYear}</Typography>
       </div>
     </div>

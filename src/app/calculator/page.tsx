@@ -3,22 +3,29 @@ import React, { useState } from 'react';
 import {
   Box,
   Typography,
-  Container, SelectChangeEvent,
+  Container,
+  SelectChangeEvent,
+  Button,
 } from "@mui/material"
-import { MortgageCalculatorFormState } from "@/app/calculator/types"
-import { CalculatedResultFromAPI, ValidationErrorsFromAPI } from "@/app/api/calculate/types"
+import { MortgageCalculatorFormState } from "@/app/calculator/types";
+import { CalculatedResultFromAPI, ValidationErrorsFromAPI } from "@/app/api/calculate/types";
 import { fetchMortgageCalculationFromAPI } from "@/app/calculator/helpers";
-import MortgageResultCard from "@/app/component/MortgageResultCard/mortgageResultCard"
-import MortgageCalculatorForm from "@/app/component/MorgageCalculatorForm/mortgageCalculatorForm"
+import MortgageResultCard from "@/app/component/MortgageResultCard/mortgageResultCard";
+import MortgageCalculatorForm from "@/app/component/MorgageCalculatorForm/mortgageCalculatorForm";
+import { useRouter } from "next/navigation"
+import { AppRouterInstance } from "next/dist/shared/lib/app-router-context.shared-runtime"
 import './styles.scss';
 
 const MortgageCalculator = () => {
+  // Initialize router for navigation
+  const router: AppRouterInstance = useRouter();
+
   // Consider using a custom hook if the form state management becomes more complex for better organization.
   const [formState, setFormState] = useState<MortgageCalculatorFormState>({
     propertyPrice: '',
     downPayment: '',
     interestRate: '',
-    amortizationPeriod: "5",
+    amortizationPeriod: '5',
     paymentSchedule: 'Monthly'
   });
 
@@ -61,11 +68,25 @@ const MortgageCalculator = () => {
     }
   };
 
+  // Handle button click to go back to the homepage
+  const handleBackToHome = () => {
+    router.push('/');
+  };
+
   return (
     <Container component="main" maxWidth="s">
+      {/* Back button */}
+      <Button
+        variant="contained"
+        className="backButton"
+        onClick={handleBackToHome}
+      >
+        🡠 Back to Homepage
+      </Button>
+      {/* Main content */}
       <Box className="container">
         <Typography variant="h4" component="h1" className="title">
-          Mortgage Calculator
+          Calculate Your Mortgage Payments
         </Typography>
         <MortgageCalculatorForm
           {...{
@@ -77,7 +98,12 @@ const MortgageCalculator = () => {
           }}
         />
         {calculationResult &&
-          <MortgageResultCard{...{ calculationResult }} />
+          <>
+            <Typography variant="h4" component="h1" className="results">
+              Your Mortgage Calculation Results
+            </Typography>
+            <MortgageResultCard{...{ calculationResult }} />
+          </>
         }
       </Box>
     </Container>

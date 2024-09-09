@@ -1,6 +1,6 @@
+import React from "react";
 import { Button, FormControl, InputLabel, MenuItem, Select, TextField } from "@mui/material";
 import { MortgageCalculatorFormProps } from "@/app/component/MorgageCalculatorForm/types";
-import React from "react";
 import "./mortgageCalculator.scss";
 
 const MortgageCalculatorForm = ({
