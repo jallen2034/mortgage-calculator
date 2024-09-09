@@ -68,6 +68,47 @@ You can start editing the page by modifying `app/page.tsx`. The page auto-update
 
 This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
 
+## Running Automated Unit Tests with Jest
+To verify the correctness of the API route and ensure that the mortgage calculation logic 
+is functioning as expected, you can run the automated unit tests using Jest. Here's how you can do i
+
+1. Navigate to the Project Directory:
+```bash
+cd mortgage-calculator-api
+```
+
+2. Install Dependencies (if you haven’t already):
+
+```bash
+npm install
+```
+
+3. Run the Tests:
+
+```bash
+npm test
+```
+
+This command will execute the Jest testing framework and run all the unit tests defined in the project. 
+You should see output similar to the following:
+
+```bash
+PASS  src/app/api/calculate/helpers.test.ts
+ validateUserInputFromClient
+   ✓ should return an error for invalid property price (3 ms)
+   ✓ should return an error for invalid down payment (1 ms)
+   ...
+ calculateCMHCInsurancePremium
+   ✓ should calculate the insurance premium for a given rate and mortgage amount
+   ...
+
+Test Suites: 1 passed, 1 total
+Tests:       37 passed, 37 total
+Snapshots:   0 total
+Time:        1.397 s
+Ran all test suites.
+```
+
 ## Screenshots
 
 Here are some screenshots of the application:
