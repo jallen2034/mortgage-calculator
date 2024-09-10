@@ -5,6 +5,16 @@ users estimate their mortgage payments based on various inputs.
 This repository includes both the frontend implementation with React and Material-UI, 
 and an API route for mortgage calculations.
 
+## Mortgage Payment Formula
+
+![Screenshot of Mortgage Calculator](media/docs/formula.png)
+
+Where:
+- **M** = Payment per payment schedule
+- **P** = Principal amount (the loan amount)
+- **r** = Interest rate per payment schedule, calculated by dividing the annual interest rate by the number of payment periods per year
+- **n** = Total number of payments over the amortization period
+
 ## Project Tech Stack
 
 The tech stack I have chosen for this project combines modern, efficient technologies for building scalable, maintainable, and high-performing applications.
