@@ -7,6 +7,8 @@ and an API route for mortgage calculations.
 
 ## Mortgage Payment Formula
 
+The formula used to calculate the mortgage payment is as follows:
+
 ![Screenshot of Mortgage Calculator](media/docs/formula.png)
 
 Where:
@@ -14,6 +16,8 @@ Where:
 - **P** = Principal amount (the loan amount)
 - **r** = Interest rate per payment schedule, calculated by dividing the annual interest rate by the number of payment periods per year
 - **n** = Total number of payments over the amortization period
+
+This formula helps estimate the amount to be paid periodically, such as monthly, based on the loan amount, interest rate, and number of payments.
 
 ## Project Tech Stack
 
