@@ -2,10 +2,11 @@ import { NextRequest, NextResponse } from "next/server"
 import { NextResponseHandler } from "@/app/api/_apiFactory/nextResponseHandler";
 import { MortgageCalculatorFormState } from "@/app/calculator/types";
 import {
-  calculateMortgageDetails, parseInputValues,
+  calculateMortgageDetails,
+  parseInputValues,
   validateUserInputFromClient
-} from "@/app/api/calculate/helpers"
-import { CalculatedResultFromAPI, ParsedInputValsAsNums, ValidationErrorsFromAPI } from "@/app/api/calculate/types"
+} from "@/app/api/calculate/helpers";
+import { CalculatedResultFromAPI, ParsedInputValsAsNums, ValidationErrorsFromAPI } from "@/app/api/calculate/types";
 
 // API route to calculate mortgage details based on user input.
 export async function POST(

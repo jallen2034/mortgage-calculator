@@ -1,4 +1,4 @@
-import { CalculatedResultFromAPI, ParsedInputValsAsNums, ValidationErrorsFromAPI } from "@/app/api/calculate/types"
+import { CalculatedResultFromAPI, ParsedInputValsAsNums, ValidationErrorsFromAPI } from "@/app/api/calculate/types";
 
 // Parses input values into numbers, ensuring valid numerical results or NaN for invalid inputs.
 const parseInputValues = (
