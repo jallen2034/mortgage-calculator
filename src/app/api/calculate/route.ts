@@ -2,10 +2,10 @@ import { NextRequest, NextResponse } from "next/server"
 import { NextResponseHandler } from "@/app/api/_apiFactory/nextResponseHandler";
 import { MortgageCalculatorFormState } from "@/app/calculator/types";
 import {
-  calculateMortgageDetails,
+  calculateMortgageDetails, parseInputValues,
   validateUserInputFromClient
 } from "@/app/api/calculate/helpers"
-import { CalculatedResultFromAPI, ValidationErrorsFromAPI } from "@/app/api/calculate/types"
+import { CalculatedResultFromAPI, ParsedInputValsAsNums, ValidationErrorsFromAPI } from "@/app/api/calculate/types"
 
 // API route to calculate mortgage details based on user input.
 export async function POST(
@@ -46,11 +46,18 @@ export async function POST(
       );
     }
 
-    // Parse the incoming values to ensure they're numbers.
-    const parsedPropertyPrice: number = parseFloat(propertyPrice);
-    const parsedAmortizationPeriod: number = parseFloat(amortizationPeriod);
-    const parsedDownPayment: number = parseFloat(downPayment);
-    const parsedInterestRate: number = parseFloat(interestRate);
+    // Parse the incoming values to ensure they're numbers using our helper.
+    const {
+      parsedPropertyPrice,
+      parsedDownPayment,
+      parsedInterestRate,
+      parsedAmortizationPeriod
+    }: ParsedInputValsAsNums = parseInputValues(
+      propertyPrice,
+      downPayment,
+      interestRate,
+      amortizationPeriod
+    );
 
     // Response payload from this API on a 200 success response for the UI to use.
     const APIResponsePayload: CalculatedResultFromAPI = calculateMortgageDetails(

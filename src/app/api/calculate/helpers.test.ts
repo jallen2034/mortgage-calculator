@@ -12,6 +12,17 @@ import {
 import { ValidationErrorsFromAPI } from "@/app/api/calculate/types"
 
 describe('validateUserInputFromClient', (): void => {
+  it('should return an error if the down payment is greater than the property price ', (): void => {
+    const errors: ValidationErrorsFromAPI = validateUserInputFromClient(
+      '340000',
+      '9997000',
+      '5',
+      '20',
+      'Monthly'
+    );
+    expect(errors.downPaymentError).toBe('The down payment cannot exceed the property\'s total price.');
+  });
+
   it('should return an error for invalid property price', (): void => {
     const errors: ValidationErrorsFromAPI = validateUserInputFromClient(
       null,
