@@ -6,7 +6,8 @@ import {
   calculateTotalNumberOfPaymentsOverAmortizationPeriod,
   convertInterestRateToDecimal,
   getPeriodsPerYear,
-  isDownPaymentLessThanMinimum, validateUserInputFromClient
+  isDownPaymentLessThanMinimum,
+  validateUserInputFromClient
 } from "@/app/api/calculate/helpers"
 import { ValidationErrorsFromAPI } from "@/app/api/calculate/types"
 

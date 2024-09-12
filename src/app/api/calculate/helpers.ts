@@ -1,5 +1,6 @@
 import { CalculatedResultFromAPI, ValidationErrorsFromAPI } from "@/app/api/calculate/types"
 
+// Validates user input for the mortgage calculator, building an object of errors if any inputs are invalid.
 const validateUserInputFromClient = (
   propertyPrice: string | null,
   downPayment: string | null,

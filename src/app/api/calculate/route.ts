@@ -12,7 +12,7 @@ export async function POST(
   request: NextRequest
 ): Promise<NextResponse<CalculatedResultFromAPI | ValidationErrorsFromAPI>> {
   try {
-    // Destructure values from the incoming request.
+    // Destructure values from the incoming request from the client.
     const {
       propertyPrice, // Principal loan amount (P).
       amortizationPeriod,
@@ -21,7 +21,7 @@ export async function POST(
       interestRate
     }: MortgageCalculatorFormState = await request.json();
 
-    // Validate input fields.
+    // Validate input fields from the client.
     const errors: ValidationErrorsFromAPI = validateUserInputFromClient(
       propertyPrice,
       downPayment,
@@ -65,7 +65,7 @@ export async function POST(
     return NextResponseHandler(APIResponsePayload, 200);
   } catch (error) {
     console.error("Unexpected error processing the mortgage calculation:", error);
-    const errorMessage: string = error.message
+    const errorMessage: string = error.message;
     return NextResponseHandler({ errorMessage }, 500);
   }
 }
