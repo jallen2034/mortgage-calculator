@@ -270,7 +270,7 @@ export function calculateMortgageDetails(
     perPaymentScheduleInterestRate
   );
 
-  return {
+  return <CalculatedResultFromAPI>{
     monthlyMortgagePayment,
     needsCHMCInsurance,
     totalMortgageAmount,
