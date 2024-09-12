@@ -36,6 +36,12 @@ const validateUserInputFromClient = (
     return errors;
   }
 
+  // Make sure the down payment isn't greater than the price of the property.
+  if (downPayment > propertyPrice) {
+    errors.downPaymentError = "The down payment cannot exceed the property's total price.";
+    return errors;
+  }
+
   const downPaymentPercentage: number = (downPayment / propertyPrice) * 100;
 
   // Validate the down payment is not less than 5%.
