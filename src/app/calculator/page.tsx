@@ -45,11 +45,11 @@ const MortgageCalculator = () => {
 
   // Handles updates to Select inputs in the form. separation of concerns.
   const handleChangeSelect = (event: SelectChangeEvent<unknown>, child: React.ReactNode): void => {
-    const { id, value }: EventTarget = event.target;
-    if (!id) return;
+    const { name, value }: EventTarget = event.target;
+    if (!name) return;
     setFormState((prevState: MortgageCalculatorFormState): MortgageCalculatorFormState => ({
       ...prevState,
-      [id]: value
+      [name]: value
     }));
   }
 
