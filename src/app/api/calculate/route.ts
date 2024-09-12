@@ -7,6 +7,7 @@ import {
   validateUserInputFromClient
 } from "@/app/api/calculate/helpers";
 import { CalculatedResultFromAPI, ParsedInputValsAsNums, ValidationErrorsFromAPI } from "@/app/api/calculate/types";
+import { HTTP_BAD_REQUEST, HTTP_INTERNAL_SERVER_ERROR, HTTP_OK } from "@/app/api/calculate/constants"
 
 // API route to calculate mortgage details based on user input.
 export async function POST(
@@ -31,20 +32,9 @@ export async function POST(
       paymentSchedule
     );
 
-    // If there are validation errors, return a 500 with the errors.
+    // If there are validation errors, return a 400 with the errors.
     if (Object.keys(errors).length > 0) {
-      return NextResponseHandler({ errors }, 500);
-    }
-
-    // Ensure all values are of valid types before proceeding.
-    if (
-      propertyPrice === null || downPayment === null || interestRate === null ||
-      amortizationPeriod === undefined || paymentSchedule === undefined
-    ) {
-      return NextResponseHandler(
-        { errorMessage: "Invalid input. All fields are required." },
-        400
-      );
+      return NextResponseHandler({ errors }, HTTP_BAD_REQUEST);
     }
 
     // Parse the incoming values to ensure they're numbers using our helper.
@@ -70,10 +60,10 @@ export async function POST(
     );
 
     // Return the calculated monthly mortgage payment in the success response.
-    return NextResponseHandler(APIResponsePayload, 200);
+    return NextResponseHandler(APIResponsePayload, HTTP_OK);
   } catch (error) {
     console.error("Unexpected error processing the mortgage calculation:", error);
     const errorMessage: string = error.message;
-    return NextResponseHandler({ errorMessage }, 500);
+    return NextResponseHandler({ errorMessage }, HTTP_INTERNAL_SERVER_ERROR);
   }
 }

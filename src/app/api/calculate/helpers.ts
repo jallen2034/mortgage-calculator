@@ -21,7 +21,7 @@ const validateUserInputFromClient = (
   downPayment: string | null,
   interestRate: string | null,
   amortizationPeriod: string | undefined,
-  paymentSchedule: string | undefined
+  paymentSchedule:  "Monthly" | "Bi-Weekly" | "Accelerated Bi-Weekly" | undefined
 ): ValidationErrorsFromAPI => {
   let errors: ValidationErrorsFromAPI = {};
 
@@ -119,7 +119,7 @@ const convertInterestRateToDecimal = (annualInterestRate: number): number => {
 
 // Determine the number of payment periods per year based on the payment schedule.
 const getPeriodsPerYear = (
-  paymentSchedule: "Monthly" | "Bi-Weekly" | "Accelerated Bi-Weekly"
+  paymentSchedule: "Monthly" | "Bi-Weekly" | "Accelerated Bi-Weekly" | undefined
 ): number => {
   switch (paymentSchedule) {
     case "Monthly":
@@ -212,7 +212,7 @@ export function calculateMortgageDetails(
   downPayment: number,
   interestRate: number,
   amortizationPeriod: number,
-  paymentSchedule: "Monthly" | "Bi-Weekly" | "Accelerated Bi-Weekly"
+  paymentSchedule: "Monthly" | "Bi-Weekly" | "Accelerated Bi-Weekly" | undefined
 ): CalculatedResultFromAPI {
   // Calculate the mortgage amount before insurance is applied.
   let totalMortgageAmount: number = propertyPrice - downPayment;
