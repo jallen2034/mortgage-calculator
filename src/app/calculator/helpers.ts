@@ -1,5 +1,5 @@
-import { CalculatedResultFromAPI, ValidationErrorsFromAPI } from "@/app/api/calculate/types"
-import { MortgageCalculatorFormState } from "@/app/calculator/types"
+import { CalculatedResultFromAPI, ValidationErrorsFromAPI } from "@/app/api/calculate/types";
+import { MortgageCalculatorFormState } from "@/app/calculator/types";
 
 // Helper function to make a APi call to the backend to calculate the mortgage.
 export async function fetchMortgageCalculationFromAPI(

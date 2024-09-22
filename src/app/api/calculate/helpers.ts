@@ -1,21 +1,49 @@
-import { CalculatedResultFromAPI, ValidationErrorsFromAPI } from "@/app/api/calculate/types"
+import { CalculatedResultFromAPI, ParsedInputValsAsNums, ValidationErrorsFromAPI } from "@/app/api/calculate/types";
 
+// Parses input values into numbers, ensuring valid numerical results or NaN for invalid inputs.
+const parseInputValues = (
+  propertyPrice: string | null,
+  downPayment: string | null,
+  interestRate: string | null,
+  amortizationPeriod: string | undefined
+): ParsedInputValsAsNums => {
+  return {
+    parsedPropertyPrice: propertyPrice ? parseFloat(propertyPrice) : NaN,
+    parsedDownPayment: downPayment ? parseFloat(downPayment) : NaN,
+    parsedInterestRate: interestRate ? parseFloat(interestRate) : NaN,
+    parsedAmortizationPeriod: amortizationPeriod ? parseFloat(amortizationPeriod) : NaN
+  };
+};
+
+// Validates user input for the mortgage calculator, building an object of errors if any inputs are invalid.
 const validateUserInputFromClient = (
   propertyPrice: string | null,
   downPayment: string | null,
   interestRate: string | null,
   amortizationPeriod: string | undefined,
-  paymentSchedule: string | undefined
+  paymentSchedule:  "Monthly" | "Bi-Weekly" | "Accelerated Bi-Weekly" | undefined
 ): ValidationErrorsFromAPI => {
   let errors: ValidationErrorsFromAPI = {};
 
+  // Destructure the parsed values using helper.
+  const {
+    parsedPropertyPrice,
+    parsedDownPayment,
+    parsedInterestRate,
+  }: ParsedInputValsAsNums = parseInputValues(
+    propertyPrice,
+    downPayment,
+    interestRate,
+    amortizationPeriod
+  );
+
   // Validate Property Price.
-  if (!propertyPrice || propertyPrice <= 0) {
+  if (!propertyPrice || parsedPropertyPrice <= 0) {
     errors.propertyPriceError = "You must submit a valid property price.";
   }
 
   // Validate Interest Rate.
-  if (!interestRate || interestRate <= 0) {
+  if (!interestRate || parsedInterestRate <= 0) {
     errors.interestRateError = "You must submit a valid interest rate.";
   }
 
@@ -30,8 +58,14 @@ const validateUserInputFromClient = (
   }
 
   // Validate down payment.
-  if (!downPayment || downPayment <= 0) {
+  if (!downPayment || parsedDownPayment <= 0) {
     errors.downPaymentError = "You must submit a valid deposit.";
+    return errors;
+  }
+
+  // Make sure the down payment isn't greater than the price of the property.
+  if (parsedDownPayment > parsedPropertyPrice) {
+    errors.downPaymentError = "The down payment cannot exceed the property's total price.";
     return errors;
   }
 
@@ -85,7 +119,7 @@ const convertInterestRateToDecimal = (annualInterestRate: number): number => {
 
 // Determine the number of payment periods per year based on the payment schedule.
 const getPeriodsPerYear = (
-  paymentSchedule: "Monthly" | "Bi-Weekly" | "Accelerated Bi-Weekly"
+  paymentSchedule: "Monthly" | "Bi-Weekly" | "Accelerated Bi-Weekly" | undefined
 ): number => {
   switch (paymentSchedule) {
     case "Monthly":
@@ -178,7 +212,7 @@ export function calculateMortgageDetails(
   downPayment: number,
   interestRate: number,
   amortizationPeriod: number,
-  paymentSchedule: "Monthly" | "Bi-Weekly" | "Accelerated Bi-Weekly"
+  paymentSchedule: "Monthly" | "Bi-Weekly" | "Accelerated Bi-Weekly" | undefined
 ): CalculatedResultFromAPI {
   // Calculate the mortgage amount before insurance is applied.
   let totalMortgageAmount: number = propertyPrice - downPayment;
@@ -236,7 +270,7 @@ export function calculateMortgageDetails(
     perPaymentScheduleInterestRate
   );
 
-  return {
+  return <CalculatedResultFromAPI>{
     monthlyMortgagePayment,
     needsCHMCInsurance,
     totalMortgageAmount,
@@ -264,5 +298,6 @@ export {
   calculateCMHCInsurancePremium,
   applyCMHCInsurance,
   calculateInsurancePremium,
-  validateUserInputFromClient
+  validateUserInputFromClient,
+  parseInputValues
 }

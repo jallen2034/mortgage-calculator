@@ -1,20 +1,20 @@
 "use client"
-import React, { useState } from "react"
+import React, { useState } from "react";
 import {
   Box,
   Typography,
   Container,
   SelectChangeEvent,
   Button,
-} from "@mui/material"
-import { MortgageCalculatorFormState } from "@/app/calculator/types"
-import { CalculatedResultFromAPI, ValidationErrorsFromAPI } from "@/app/api/calculate/types"
-import { fetchMortgageCalculationFromAPI } from "@/app/calculator/helpers"
-import MortgageResultCard from "@/app/component/MortgageResultCard/mortgageResultCard"
-import MortgageCalculatorForm from "@/app/component/MorgageCalculatorForm/mortgageCalculatorForm"
-import { useRouter } from "next/navigation"
-import { AppRouterInstance } from "next/dist/shared/lib/app-router-context.shared-runtime"
-import "./styles.scss"
+} from "@mui/material";
+import { MortgageCalculatorFormState } from "@/app/calculator/types";
+import { CalculatedResultFromAPI, ValidationErrorsFromAPI } from "@/app/api/calculate/types";
+import { fetchMortgageCalculationFromAPI } from "@/app/calculator/helpers";
+import MortgageResultCard from "@/app/component/MortgageResultCard/mortgageResultCard";
+import MortgageCalculatorForm from "@/app/component/MorgageCalculatorForm/mortgageCalculatorForm";
+import { useRouter } from "next/navigation";
+import { AppRouterInstance } from "next/dist/shared/lib/app-router-context.shared-runtime";
+import "./styles.scss";
 
 const MortgageCalculator = () => {
   // Initialize router for navigation.
@@ -114,6 +114,6 @@ const MortgageCalculator = () => {
       </Box>
     </Container>
   )
-}
+};
 
-export default MortgageCalculator
+export default MortgageCalculator;

@@ -21,3 +21,10 @@ export interface ValidationErrorsFromAPI {
   amortizationPeriodError?: string;
   paymentScheduleError?: string;
 }
+
+export interface ParsedInputValsAsNums {
+  parsedPropertyPrice: number;
+  parsedDownPayment: number;
+  parsedInterestRate: number;
+  parsedAmortizationPeriod: number
+}

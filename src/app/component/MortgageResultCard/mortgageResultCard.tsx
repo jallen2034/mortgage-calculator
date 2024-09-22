@@ -1,8 +1,8 @@
 import React from "react";
 import { Typography, Divider } from "@mui/material";
 import { MortgageResultCardProps } from "@/app/component/MortgageResultCard/types";
+import { formatCurrency } from "@/app/component/MortgageResultCard/helpers";
 import "./mortgageResultCard.scss";
-import { formatCurrency } from "@/app/component/MortgageResultCard/helpers"
 
 const MortgageResultCard = ({ calculationResult }: MortgageResultCardProps) => {
   return (
